@@ -1,0 +1,48 @@
+samples:
+    SRR8114380: "../input/SRR8114380/SRR8114380_1.fastq.gz"
+    SRR8114381: "../input/SRR8114381/SRR8114381_1.fastq.gz"
+    SRR8114382: "../input/SRR8114382/SRR8114382_1.fastq.gz"
+    SRR8114383: "../input/SRR8114383/SRR8114383_1.fastq.gz"
+    SRR8114384: "../input/SRR8114384/SRR8114384_1.fastq.gz"
+    SRR8114385: "../input/SRR8114385/SRR8114385_1.fastq.gz"
+
+adapter: "TGGAATTCTCGGGTGCCAAGGAACTC"
+
+exogenousMapping: false
+
+# Set it to false if your HPC does not use scratch
+useScratch: true
+
+softwares: 
+    hts_Stats: "/home/chhzhu/miniconda3/bin/hts_Stats"
+    hts_AdapterTrimmer: "/home/chhzhu/miniconda3/bin/hts_AdapterTrimmer"
+    hts_QWindowTrim: "/home/chhzhu/miniconda3/bin/hts_QWindowTrim"
+    hts_NTrimmer: "/home/chhzhu/miniconda3/bin/hts_NTrimmer"
+    htseq_count: "/home/chhzhu/miniconda3/bin/htseq-count"
+    STAR: "/share/apps/star-2.7.2a/bin/STAR"
+
+genomes:
+    univec: "genomes/UniVec_Core.fasta"
+    human: "genomes/GRCh38.primary_assembly.genome.fa"
+    U13369: "genomes/U13369.1.fasta"
+
+annotations:
+    gencode: "genomes/gencode_human_annotation.gtf"
+    tRNA: "genomes/tRNA.gtf"
+    piRNA: "genomes/piRNA.gtf"
+
+urls:
+    # The univec library from NCBI
+    univec: "ftp://ftp.ncbi.nlm.nih.gov/pub/UniVec/UniVec_Core"
+    # The complete rRNA gene sequence from NCBI
+    # U13369: "https://ncbi.nlm.nih.gov/nuccore/U13369.1?report=fasta"
+    # The 5s RNA gene from ensembl
+    rna5s1: "http://rest.ensembl.org/sequence/id/ENSG00000199352?expand_3prime=600&expand_5prime=600&content-type=text/x-fasta"
+    # Human genome from Gencode
+    human: "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_32/GRCh38.primary_assembly.genome.fa.gz"
+    # tRNA annotation from gencode, generated from GtRNAdb
+    tRNA: "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_32/gencode.v32.tRNAs.gtf.gz"
+    # piRNA annotation
+    piRNA: "http://www.regulatoryrna.org/database/piRNA/download/archive/v2.0/bed/hsa.bed.gz"
+    # gencode human genome annotation
+    gencode: "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_32/gencode.v32.primary_assembly.annotation.gtf.gz"

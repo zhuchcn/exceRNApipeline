@@ -1,0 +1,7 @@
+.empty
+.snakemake
+slurm_job_status
+slurmout
+output
+genomes
+__pycache__
