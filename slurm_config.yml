@@ -34,3 +34,23 @@ genome_index:
 genome_mapping:
     exclude: "c8-96"
     mem: 60G
+
+make_re_fasta:
+    mem: 60G
+
+re_index:
+    exclude: "c8-96"
+    mem: 60G
+
+re_mapping:
+    exclude: "c8-96"
+    mem: 60G
+
+silva_index:
+    exclude: "c8-96"
+    mem: 30G
+
+silva_mapping:
+    exclude: "c8-96"
+    mem: 30G
+    mail-type: NONE

@@ -13,13 +13,18 @@ exogenousMapping: false
 # Set it to false if your HPC does not use scratch
 useScratch: true
 
+silva_split: 10
+
 softwares: 
     hts_Stats: "/home/chhzhu/miniconda3/bin/hts_Stats"
     hts_AdapterTrimmer: "/home/chhzhu/miniconda3/bin/hts_AdapterTrimmer"
     hts_QWindowTrim: "/home/chhzhu/miniconda3/bin/hts_QWindowTrim"
     hts_NTrimmer: "/home/chhzhu/miniconda3/bin/hts_NTrimmer"
     htseq_count: "/home/chhzhu/miniconda3/bin/htseq-count"
+    hts_fastx: "/home/chhzhu/miniconda3/bin/hts_fastx"
+    hts_taxonomy: "/home/chhzhu/miniconda3/bin/hts_taxonomy"
     STAR: "/share/apps/star-2.7.2a/bin/STAR"
+    samtools: "/share/apps/samtools-1.9/bin/samtools"
 
 genomes:
     univec: "genomes/UniVec_Core.fasta"
@@ -46,3 +51,25 @@ urls:
     piRNA: "http://www.regulatoryrna.org/database/piRNA/download/archive/v2.0/bed/hsa.bed.gz"
     # gencode human genome annotation
     gencode: "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_32/gencode.v32.primary_assembly.annotation.gtf.gz"
+    # RepeatMasker
+    repeat_masker: "http://www.repeatmasker.org/genomes/hg38/RepeatMasker-rm405-db20140131/hg38.fa.out.gz"
+    # miRBase
+    miRBase: ftp://mirbase.org/pub/mirbase/22.1/hairpin.fa.gz -O $genome_fa.gz
+    # SILVA LSU
+    silva_lsu: https://www.arb-silva.de/fileadmin/silva_databases/release_132/Exports/SILVA_132_LSUParc_tax_silva.fasta.gz
+    # SILVA SSU
+    silva_ssu: https://www.arb-silva.de/fileadmin/silva_databases/release_132/Exports/SILVA_132_SSUParc_tax_silva.fasta.gz
+    # SILVA NCBI taxonomy mapper for LSU
+    silva_taxmap_lsu: https://www.arb-silva.de/fileadmin/silva_databases/release_132/Exports/taxonomy/taxmap_ncbi_lsu_parc_132.txt.gz
+    # SILVA NCBI taxonomy mapper for SSU
+    silva_taxmap_ssu: https://www.arb-silva.de/fileadmin/silva_databases/release_132/Exports/taxonomy/taxmap_ncbi_ssu_parc_132.txt.gz
+    # NCBI taxdump
+    ncbi_taxdump: ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz
+
+tax_levels:
+    - "phylum"
+    - "class"
+    - "order"
+    - "family"
+    - "genus"
+    - "species"

@@ -1,6 +1,7 @@
 import os
 import shutil
 from snakemake.shell import shell
+from datetime import datetime
 
 
 class SlurmJob():
@@ -28,3 +29,10 @@ class SlurmJob():
     def tearDown(self):
         shutil.rmtree(self.scratch)
         os.remove(self.logfile)
+
+
+def log(msg):
+    print(
+        '[ ' + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' ]' + msg,
+        flush=True
+    )

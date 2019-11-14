@@ -1,7 +1,10 @@
+._report.html
+.vscode
 .empty
 .snakemake
 slurm_job_status
 slurmout
 output
 genomes
+report.html
 __pycache__
