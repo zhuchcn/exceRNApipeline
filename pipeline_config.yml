@@ -15,16 +15,7 @@ useScratch: true
 
 silva_split: 10
 
-softwares: 
-    hts_Stats: "/home/chhzhu/miniconda3/bin/hts_Stats"
-    hts_AdapterTrimmer: "/home/chhzhu/miniconda3/bin/hts_AdapterTrimmer"
-    hts_QWindowTrim: "/home/chhzhu/miniconda3/bin/hts_QWindowTrim"
-    hts_NTrimmer: "/home/chhzhu/miniconda3/bin/hts_NTrimmer"
-    htseq_count: "/home/chhzhu/miniconda3/bin/htseq-count"
-    hts_fastx: "/home/chhzhu/miniconda3/bin/hts_fastx"
-    hts_taxonomy: "/home/chhzhu/miniconda3/bin/hts_taxonomy"
-    STAR: "/share/apps/star-2.7.2a/bin/STAR"
-    samtools: "/share/apps/samtools-1.9/bin/samtools"
+bacteria_split: 20
 
 genomes:
     univec: "genomes/UniVec_Core.fasta"

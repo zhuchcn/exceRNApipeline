@@ -7,8 +7,8 @@ if snakemake.params.get('useScratch'):
     slurm = SlurmJob()
     slurm.setUp()
     sample = snakemake.wildcards.sample
-    index = snakemake.wildcards.silva_ind
-    output_prefix = f'{slurm.scratch}/{sample}/silva_{index}_'
+    index = snakemake.wildcards.bacteria_ind
+    output_prefix = f'{slurm.scratch}/{sample}/bacteria_{index}_'
     os.mkdir(os.path.join(slurm.scratch, sample))
 else:
     output_prefix = snakemake.prams.prefix

@@ -6,8 +6,6 @@ rule silva_mapping:
     wildcard_constraints:
         silva_ind="[0-9]+"
     params:
-        STAR=config['softwares']['STAR'],
-        samtools=config['softwares']['samtools'],
         prefix="06-SILVA/{sample}/Aligned_{silva_ind}/",
         useScratch = config['useScratch'],
         ram="64424509440"
@@ -48,11 +46,10 @@ rule silva_count_taxa:
             tax=config["tax_levels"]
         )
     params: 
-        hts_taxonomy = config["softwares"]['hts_taxonomy'],
         prefix = "output/06-SILVA/{sample}/exogenousAligned_SILVA_"
     threads: 4
     shell: """
-    {params.hts_taxonomy} count-taxa \\
+    hts_taxonomy count-taxa \\
         --input-file {input.sample} \\
         --output-prefix {params.prefix} \\
         --nodes-dump  {input.taxdump}/nodes.dmp \\
@@ -65,7 +62,7 @@ rule silva_count_combine:
             "output/06-SILVA/{sample}/exogenousAligned_SILVA_{{tax}}.txt",
             sample=config["samples"]
         )
-    output: "output/06-SILVA/{sample}/SILVA_count_{tax}.txt"
+    output: "output/06-SILVA/SILVA_count_{tax}.txt"
     threads: 4
     run: 
         from pandas import read_csv
@@ -90,7 +87,6 @@ rule silva_extract_unmapped:
     output: 
         unmapped = "output/06-SILVA/{sample}/Unmapped.fastq.gz",
     params:
-        hts_fastx = config["softwares"]["hts_fastx"],
         namelist_path = "output/06-SILVA/{sample}/aligned_reads.txt",
         useScratch = config["useScratch"]
     threads: 3

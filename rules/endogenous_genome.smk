@@ -14,7 +14,6 @@ rule genome_index:
     output: 
         directory("genomes/star_index_human_genome")
     params:
-        STAR=config['softwares']['STAR'],
         extra = "--genomeSAindexNbases 14 --genomeChrBinNbits 18",
         useScratch = config['useScratch']
     threads: 12
@@ -28,7 +27,6 @@ rule genome_mapping:
         bam="output/04-Genome/{sample}/Aligned.out.bam",
         unmapped="output/04-Genome/{sample}/Unmapped.fastq.gz"
     params:
-        STAR=config['softwares']['STAR'],
         prefix="output/04-Genome/{sample}/",
         useScratch = config['useScratch']
     threads: 24

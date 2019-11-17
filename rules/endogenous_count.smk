@@ -11,17 +11,15 @@ rule genome_count:
         gencode = "output/04-Genome/{sample}/ReadsPerGene_gencode.txt",
         tRNA = "output/04-Genome/{sample}/ReadsPerGene_tRNA.txt",
         piRNA = "output/04-Genome/{sample}/ReadsPerGene_piRNA.txt"
-    params:
-        htseq_count = config['softwares']['htseq_count']
     threads: 4
     shell: """
-    {params.htseq_count} -f bam -s no -i gene_id \
+    htseq_count -f bam -s no -i gene_id \
         --additional-attr gene_name --additional-attr gene_type \
         {input.bam} {input.gencode} > {output.gencode}
-    {params.htseq_count} -f bam -s no -i gene_id \
+    htseq_count -f bam -s no -i gene_id \
         --additional-attr gene_name --additional-attr gene_type \
         {input.bam} {input.tRNA} > {output.tRNA};
-    {params.htseq_count} -f bam -s no -i gene_id \
+    htseq_count -f bam -s no -i gene_id \
         --additional-attr gene_name --additional-attr gene_type \
         {input.bam} {input.piRNA} > {output.piRNA};
     """
@@ -39,4 +37,4 @@ rule summarize_counts:
     params:
         samples = list(config['samples'].keys())
     threads: 4
-    script: "../src/summarize_counts_endogenous.py"
+    script: "../src/summarize_counts.py"

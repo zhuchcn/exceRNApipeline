@@ -3,7 +3,6 @@ import re
 import os
 import argparse
 import math
-import progressbar
 from magic import from_file
 from pathos.multiprocessing import ProcessingPool as Pool
 from utils import log
@@ -23,14 +22,23 @@ class EnsemblFTP():
     def ls(self, path):
         return self.ftp.nlst(path)
     
+    def get_bacteria_collection_numbers(self, version="current"):
+        cols = self.ls(f"pub/bacteria/{version}/fasta")
+        cols = [os.path.basename(c) for c in cols]
+        inds = [re.sub("bacteria_([0-9]+)_collection", "\\1", c) for c in cols]
+        inds = [int(i) for i in inds]
+        inds.sort()
+        return inds
+    
     def has_valid_domain(self, domain):
         if domain in ['bacteria', 'fungi', 'metazoa', 'plants', 'protists']:
             return True
         return False
     
     def download(self, path, filename, verbose):
+        if verbose:
+            log(f"Using url: {self.baseurl + path}")
         with open(filename, "wb") as fh:
-        #log(f"Using url: {self.baseurl + path}")
             self.ftp.retrbinary("RETR " + path, fh.write)
         return True
 
@@ -42,10 +50,8 @@ class EnsemblFTP():
         # find the fasta.gz file
         files= self.ls(f"{url}/dna")
         file_names = [os.path.basename(x) for x in files]
-        r_matches = [
-            bool(re.search("dna.toplevel.fa.gz$", x)) \
-                for x in file_names
-        ]
+        r_matches = [bool(re.search("dna.toplevel.fa.gz$", x)) \
+                     for x in file_names]
         path = files[r_matches.index(True)]
         
         filename = os.path.join(outdir, os.path.basename(path))

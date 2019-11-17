@@ -3,10 +3,6 @@ rule preprocess:
         sample=lambda wildcards: config['samples'][wildcards.sample]
     output: "output/01-Preprocess/{sample}/{sample}_SE.fastq.gz"
     params:
-        hts_Stats=config["softwares"]["hts_Stats"],
-        hts_AdapterTrimmer=config["softwares"]["hts_AdapterTrimmer"],
-        hts_QWindowTrim=config["softwares"]["hts_QWindowTrim"],
-        hts_NTrimmer=config["softwares"]["hts_NTrimmer"],
         adapter=config['adapter'],
         prefix="output/01-Preprocess/{sample}/{sample}",
         useScratch = config['useScratch']

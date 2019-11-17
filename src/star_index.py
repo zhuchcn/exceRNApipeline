@@ -18,7 +18,7 @@ else:
 cmd = f"""
     cd {wd}
     mkdir {genome_dir}
-    {snakemake.params.STAR} {snakemake.params.extra} \\
+    STAR {snakemake.params.extra} \\
         --runMode genomeGenerate \\
         --genomeFastaFiles {input_genome} \\
         --genomeDir {genome_dir} \\

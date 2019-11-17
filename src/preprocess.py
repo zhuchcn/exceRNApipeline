@@ -13,19 +13,17 @@ else:
     prefix = snakemake.params.prefix
 
 
-cmd = f"""
-    {snakemake.params.hts_Stats} -L {log} -U {snakemake.input} | \
-    {snakemake.params.hts_AdapterTrimmer} -A -L {log} -a {snakemake.params.adapter} | \
-    {snakemake.params.hts_QWindowTrim} -n -A -L {log} | \
-    {snakemake.params.hts_NTrimmer} -n -A -L {log}  | \
-    {snakemake.params.hts_Stats} -A -L {log} -f {prefix}
-"""
-shell(cmd)
+shell(f"""
+    hts_Stats -L {log} -U {snakemake.input} | \\
+    hts_AdapterTrimmer -A -L {log} -a {snakemake.params.adapter} | \\
+    hts_QWindowTrim -n -A -L {log} | \\
+    hts_NTrimmer -n -A -L {log}  | \\
+    hts_Stats -A -L {log} -f {prefix}
+""")
 
 if snakemake.params.get('useScratch'):
-    cmd = f"""
+    shell(f"""
     mv {slurm.scratch}/{sample}_SE.fastq.gz  {snakemake.output}
-    mv {slurm.scratch}/{sample}.htsStats.log  {snakemake.log}
-    """
-    shell(cmd)
+    mv ){slurm.scratch}/{sample}.htsStats.log  {snakemake.log}
+    """)
     slurm.tearDown()

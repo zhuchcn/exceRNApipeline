@@ -12,7 +12,6 @@ rule mirbase_index:
     output: 
         directory("genomes/star_index_mirbase")
     params:
-        STAR = config['softwares']['STAR'],
         extra = "--genomeSAindexNbases 10 --genomeChrBinNbits 7",
         useScratch = config['useScratch']
     threads: 6
@@ -27,7 +26,6 @@ rule mirbase_mapping:
         unmapped="output/06-miRBase/{sample}/Unmapped.fastq.gz"
     params:
         prefix="output/06-miRBase/{sample}/",
-        STAR=config['softwares']['STAR'],
         useScratch = config['useScratch'],
         extra="""
         --outFilterMismatchNoverLmax 0.3 \

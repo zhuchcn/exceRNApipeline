@@ -7,14 +7,8 @@ report: "reports/workflow.rst"
 
 rule all:
     input: 
-        silva = expand(
-            "output/06-SILVA/{sample}/exogenousAligned_SILVA_{tax}.txt",
-            tax=config["tax_levels"], sample=config["samples"]
-        ),
-        unmapped = expand(
-            "output/06-SILVA/{sample}/Unmapped.fastq.gz",
-            sample=config["samples"]
-        )
+        expand("output/06-SILVA/SILVA_count_{tax}.txt",tax=config["tax_levels"]),
+        expand("output/07-Bacteria/bacteria_count_{tax}.txt",tax=config["tax_levels"])
 
 # Step 1: preprocessing
 include: "rules/preprocess.smk"
@@ -38,4 +32,4 @@ include: "rules/silva_make_db.smk"
 include: "rules/silva_mapping.smk"
 
 # Step 7: map to Bacteria
-# include: "rules/bacteria_make_db.smk"
+include: "rules/bacteria_mapping.smk"

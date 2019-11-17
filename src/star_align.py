@@ -17,7 +17,7 @@ if extra_args is None:
     extra_args = ""
 
 cmd = f"""
-{snakemake.params.STAR} \\
+STAR \\
     --runMode alignReads \\
     --readFilesIn {snakemake.input.sample} \\
     --genomeDir {snakemake.input.genome} \\

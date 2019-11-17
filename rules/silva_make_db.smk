@@ -27,8 +27,6 @@ rule filter_silva:
         silva_ssu = temp("genomes/silva_ssu_filter.fa.gz"),
         silva_lsu_namelist = temp("genomes/silva_lsu_namelist.txt"),
         silva_ssu_namelist = temp("genomes/silva_ssu_namelist.txt")
-    params:
-        hts_fastx = config['softwares']['hts_fastx']
     threads: 4
     shell: """
     zcat {input.silva_lsu} | grep '^>' |\\
@@ -39,13 +37,13 @@ rule filter_silva:
         grep -e ' Bacteria;' -e ' Archaea;' \\
              -e ' Eukaryota;Opisthokonta;Nucletmycea;Fungi;' |\\
         sed 's/^>//g' > {output.silva_ssu_namelist}
-    {params.hts_fastx} extract-fastx \\
+    hts_fastx extract-fastx \\
         --input-file {input.silva_lsu} \\
         --output-file {output.silva_lsu} \\
         --namelist-file {output.silva_lsu_namelist} \\
         --format fasta \\
         --verbose
-    {params.hts_fastx} extract-fastx \\
+    hts_fastx extract-fastx \\
         --input-file {input.silva_ssu} \\
         --output-file {output.silva_ssu} \\
         --namelist-file {output.silva_ssu_namelist} \\
@@ -71,12 +69,11 @@ rule make_silva:
         )
     params:
         silva_split = config['silva_split'],
-        output_prefix = "genomes/silva_tax/silva_",
-        hts_fastx = config["softwares"]["hts_fastx"]
+        output_prefix = "genomes/silva_tax/silva_"
     threads: 4
     shell: """
     zcat {input} | sed -E 's/ .+$/:SSU/' > {output.combine}
-    {params.hts_fastx} split-fasta \\
+    hts_fastx split-fasta \\
         --input-file  {output.combine} \\
         --output-prefix {params.output_prefix} \\
         --n-batch {params.silva_split}
@@ -91,8 +88,6 @@ rule silva_index:
     wildcard_constraints:
         silva_ind="[0-9]+"
     params:
-        STAR = config['softwares']['STAR'],
-        samtools = config['softwares']['samtools'],
         extra = "--genomeSAindexNbases 10 --genomeChrBinNbits 7",
         useScratch = config['useScratch']
     threads: 12
