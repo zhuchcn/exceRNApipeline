@@ -5,10 +5,24 @@ configfile: "pipeline_config.yml"
 # TODO: figure this out
 report: "reports/workflow.rst"
 
-rule all:
-    input: 
-        expand("output/06-SILVA/SILVA_count_{tax}.txt",tax=config["tax_levels"]),
-        expand("output/07-Bacteria/bacteria_count_{tax}.txt",tax=config["tax_levels"])
+if not config["exogenous_mapping"]:
+    rule all:
+        input:
+            gencode = "output/04-Genome/ReadsPerGene_gencode.txt",
+            tRNA = "output/04-Genome/ReadsPerGene_tRNA.txt",
+            piRNA = "output/04-Genome/ReadsPerGene_piRNA.txt",
+            summary = "output/04-Genome/ReadsPerGene_summary.txt",
+            bam = expand("output/04-Genome/{sample}/Aligned.out.bam", sample=config["samples"]),    
+else:
+    rule all:
+        input: 
+            gencode = "output/04-Genome/ReadsPerGene_gencode.txt",
+            tRNA = "output/04-Genome/ReadsPerGene_tRNA.txt",
+            piRNA = "output/04-Genome/ReadsPerGene_piRNA.txt",
+            summary = "output/04-Genome/ReadsPerGene_summary.txt",
+            bam = expand("output/04-Genome/{sample}/Aligned.out.bam", sample=config["samples"]),
+            silva = expand("output/06-SILVA/SILVA_count_{tax}.txt",tax=config["tax_levels"]),
+            bacteria = expand("output/07-Bacteria/bacteria_count_{tax}.txt",tax=config["tax_levels"])
 
 # Step 1: preprocessing
 include: "rules/preprocess.smk"

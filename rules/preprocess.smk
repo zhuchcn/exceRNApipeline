@@ -5,7 +5,7 @@ rule preprocess:
     params:
         adapter=config['adapter'],
         prefix="output/01-Preprocess/{sample}/{sample}",
-        useScratch = config['useScratch']
+        use_scratch = config['use_scratch']
     log: "output/01-Preprocess/{sample}/{sample}.htsStats.log"
     threads: 5
     script: '../src/preprocess.py'

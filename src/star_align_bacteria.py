@@ -3,7 +3,7 @@ from snakemake.shell import shell
 from utils import SlurmJob
 
 
-if snakemake.params.get('useScratch'):
+if snakemake.params.get('use_scratch'):
     slurm = SlurmJob()
     slurm.setUp()
     sample = snakemake.wildcards.sample
@@ -47,7 +47,7 @@ samtools view \\
     > {snakemake.output}
 """)
 
-if snakemake.params.get('useScratch'):
+if snakemake.params.get('use_scratch'):
     slurm.tearDown()
 else:
     shell(f"rm -rf {snakemake.params.prefix}*")

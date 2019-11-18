@@ -89,6 +89,6 @@ rule silva_index:
         silva_ind="[0-9]+"
     params:
         extra = "--genomeSAindexNbases 10 --genomeChrBinNbits 7",
-        useScratch = config['useScratch']
+        use_scratch = config['use_scratch']
     threads: 12
     script: '../src/star_index.py'

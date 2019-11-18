@@ -7,7 +7,7 @@ rule silva_mapping:
         silva_ind="[0-9]+"
     params:
         prefix="06-SILVA/{sample}/Aligned_{silva_ind}/",
-        useScratch = config['useScratch'],
+        use_scratch = config['use_scratch'],
         ram="64424509440"
     threads: 12
     script: '../src/star_align_silva.py'
@@ -88,6 +88,6 @@ rule silva_extract_unmapped:
         unmapped = "output/06-SILVA/{sample}/Unmapped.fastq.gz",
     params:
         namelist_path = "output/06-SILVA/{sample}/aligned_reads.txt",
-        useScratch = config["useScratch"]
+        use_scratch = config["use_scratch"]
     threads: 3
     script: '../src/silva_extract_unmapped.py'

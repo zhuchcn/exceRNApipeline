@@ -21,7 +21,7 @@ rule rrna_index:
         directory("genomes/star_index_rrna_human")
     params:
         extra = "--genomeSAindexNbases 8 --genomeChrBinNbits 16",
-        useScratch = config['useScratch']
+        use_scratch = config['use_scratch']
     threads: 8
     script: '../src/star_index.py'
 
@@ -34,6 +34,6 @@ rule rrna_mapping:
         unmapped="output/03-rRNA/{sample}/Unmapped.fastq.gz"
     params:
         prefix="output/03-rRNA/{sample}/",
-        useScratch = config['useScratch']
+        use_scratch = config['use_scratch']
     threads: 12
     script: '../src/star_align.py'

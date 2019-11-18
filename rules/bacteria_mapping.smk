@@ -47,7 +47,7 @@ rule bacteria_index:
         temp(directory("genomes/bacteria/star_index/bacteria_{bacteria_ind}_collection"))
     params:
         extra = "--genomeSAindexNbases 13 --genomeChrBinNbits 16",
-        useScratch = config['useScratch']
+        use_scratch = config['use_scratch']
     threads: 12
     script: "../src/star_index.py"
 
@@ -59,7 +59,7 @@ rule bacteria_mapping:
         temp("output/07-Bacteria/{sample}/Aligned_{bacteria_ind}.txt.gz")
     params:
         prefix="06-SILVA/{sample}/Aligned_{silva_ind}/",
-        useScratch = config['useScratch'],
+        use_scratch = config['use_scratch'],
         ram="34359738368"
     threads: 16
     script: "../src/star_align_bacteria.py"

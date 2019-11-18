@@ -3,7 +3,7 @@ from snakemake.shell import shell
 from utils import SlurmJob
 
 
-if snakemake.params.get('useScratch'):
+if snakemake.params.get('use_scratch'):
     slurm = SlurmJob()
     slurm.setUp()
     sample = snakemake.wildcards.sample
@@ -35,7 +35,7 @@ STAR \\
 """
 shell(cmd)
 
-if snakemake.params.get('useScratch'):
+if snakemake.params.get('use_scratch'):
     cmd = f"""
     gzip -c {output_prefix}Unmapped.out.mate1 \\
             > {output_prefix}Unmapped.fastq.gz

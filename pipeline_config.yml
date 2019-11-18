@@ -8,10 +8,10 @@ samples:
 
 adapter: "TGGAATTCTCGGGTGCCAAGGAACTC"
 
-exogenousMapping: false
+exogenous_mapping: true
 
 # Set it to false if your HPC does not use scratch
-useScratch: true
+use_scratch: true
 
 silva_split: 10
 

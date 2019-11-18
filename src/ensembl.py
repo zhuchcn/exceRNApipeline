@@ -5,7 +5,7 @@ import argparse
 import math
 from magic import from_file
 from pathos.multiprocessing import ProcessingPool as Pool
-from utils import log
+from src.utils import log
 
 
 class EnsemblFTP():

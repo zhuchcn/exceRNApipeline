@@ -14,7 +14,7 @@ rule univec_index:
         directory("genomes/star_index_univec")
     params:
         extra = "--genomeSAindexNbases 8 --genomeChrBinNbits 16",
-        useScratch = config['useScratch']
+        use_scratch = config['use_scratch']
     threads: 8
     script: '../src/star_index.py'
 
@@ -27,6 +27,6 @@ rule univec_mapping:
         unmapped="output/02-UniVec/{sample}/Unmapped.fastq.gz"
     params:
         prefix="output/02-UniVec/{sample}/",
-        useScratch = config['useScratch']
+        use_scratch = config['use_scratch']
     threads: 12
     script: '../src/star_align.py'

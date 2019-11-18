@@ -1,15 +1,17 @@
 #!/bin/bash -l
 
 function help {
-    echo "snakemakeslurm - submit snakemake pipeline with slurm"
+    echo "snakemakeslurm - submit this snakemake pipeline with slurm"
     echo ""
-    echo "usage: snakemakeslurm [-h] [--clean-scratch]"
+    echo "usage: snakemakeslurm [-h] [-c --clean-scratch] [-s --snakemake-args]"
     echo ""
     echo "The snakemake job is submitted when no argument was used."
     echo ""
     echo "optionals:"
     echo "-h, --help                show this help message and exit"
     echo "-c, --clean-scratch       clean scratch temprary files in each node and exit"
+    echo "-s, --snakemake-args      snakemake args to be parsed to snakemake"
+    echo "                          must be wrapped in quotes"
 }
 
 function clean_scratch {
@@ -29,6 +31,16 @@ function clean_scratch {
 }
 
 function main {
+    if [ "$(basename $CONDA_PREFIX)" != "exceRNApipeline" ]; then
+        read -p "Conda environment is not activated. Activate it? [Y/n]" -n 1 -r
+        if [ $REPLY == "Y" ]; then
+            call="conda activate exceRNApipeline"
+            echo -e "\n$call"
+            eval $call
+            echo $(which python)
+        fi
+    fi
+
     SM_PARAMS="job-name partition mail-user mail-type output error time nodes mem exclude"
     SM_ARGS="--ntasks {threads} --mem-per-cpu {cluster.mem-per-cpu}"
     for P in ${SM_PARAMS}
@@ -36,12 +48,18 @@ function main {
         SM_ARGS="$SM_ARGS --$P {cluster.$P}"
     done
 
-    [[ "$USER_EMAIL" -eq "" ]] && USER_EMAIL="null"
+    # prompt a message if USER_EMAIL is not set
+    if [ -z "$USER_EMAIL" ]
+    then
+        echo "warning: USER_EMAIL is not set. Emails will not be sent. To set email, use the command:"
+        echo "export USER_EMAIL=youremail@example.com"
+        USER_EMAIL="null"
+    fi
 
     mkdir -p slurmout
 
     srun \
-            -N 1 -n 1 -t 5-0 --mail-user $USER_EMAIL --mail-type ALL \
+            -N 1 -n 1 -t 14-0 --mail-user $USER_EMAIL --mail-type ALL \
             -o slurmout/snakemake_%A.log -e slurmout/snakemake_%A.err \
         snakemake \
             $* \
@@ -53,15 +71,17 @@ function main {
 }
 
 # parse arguments
+snakemake_args=""
 while [[ $# -gt 0 ]]
 do
     key="$1"
     case $key in
         -h|--help) help; exit ;;
         -c|--clean-scratch) clean_scratch; exit ;;
+        -s|--snakemake-args) snakemake_args="$2"; shift 2 ;;
         -*|--*) echo "unknown option: $1" >&2; help; exit 1 ;;
     esac
 done
 
 # run snakemake
-main
+main "$snakemake_args"

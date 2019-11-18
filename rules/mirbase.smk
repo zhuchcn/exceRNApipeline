@@ -13,7 +13,7 @@ rule mirbase_index:
         directory("genomes/star_index_mirbase")
     params:
         extra = "--genomeSAindexNbases 10 --genomeChrBinNbits 7",
-        useScratch = config['useScratch']
+        use_scratch = config['use_scratch']
     threads: 6
     script: '../src/star_index.py'
 
@@ -26,7 +26,7 @@ rule mirbase_mapping:
         unmapped="output/06-miRBase/{sample}/Unmapped.fastq.gz"
     params:
         prefix="output/06-miRBase/{sample}/",
-        useScratch = config['useScratch'],
+        use_scratch = config['use_scratch'],
         extra="""
         --outFilterMismatchNoverLmax 0.3 \
         --outFilterMatchNminOverLread 1.0 \

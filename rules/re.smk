@@ -25,7 +25,7 @@ rule re_index:
         directory("genomes/star_index_re")
     params:
         extra = "--genomeSAindexNbases 14 --genomeChrBinNbits 8",
-        useScratch = config['useScratch']
+        use_scratch = config['use_scratch']
     threads: 24
     script: '../src/star_index.py'
 
@@ -38,6 +38,6 @@ rule re_mapping:
         unmapped="output/05-RE/{sample}/Unmapped.fastq.gz"
     params:
         prefix="output/05-RE/{sample}/",
-        useScratch = config['useScratch']
+        use_scratch = config['use_scratch']
     threads: 24
     script: '../src/star_align.py'

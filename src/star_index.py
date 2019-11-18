@@ -3,7 +3,7 @@ from snakemake.shell import shell
 from utils import SlurmJob
 
 
-if snakemake.params.get('useScratch'):
+if snakemake.params.get('use_scratch'):
     slurm = SlurmJob()
     slurm.setUp()
     wd = slurm.scratch
@@ -26,6 +26,6 @@ cmd = f"""
 """
 shell(cmd)
 
-if snakemake.params.get('useScratch'):
+if snakemake.params.get('use_scratch'):
     shell(f"mv {slurm.scratch}/{genome_dir} {snakemake.output}")
     slurm.tearDown()
