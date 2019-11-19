@@ -19,7 +19,7 @@ rule bacteria_download_genomes:
 
 def bacteria_index_prev(wildcards):
     ind = int(wildcards.bacteria_ind)
-    jobs = config["bacteria_split"]
+    jobs = config["parallel"]["bacteria"]
     indices = BACTERIA_COLLECTION_INDICES
     inds_each_job = [indices[start::jobs] for start in range(jobs)]
     cuts = [len(x) for x in inds_each_job]

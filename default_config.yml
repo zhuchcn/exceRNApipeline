@@ -1,8 +1,8 @@
 exogenous_mapping: false
 
-silva_split: 10
-
-bacteria_split: 20
+parallel:
+    silva: 10
+    bacteria: 10
 
 urls:
     # The univec library from NCBI

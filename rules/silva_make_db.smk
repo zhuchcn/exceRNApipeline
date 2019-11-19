@@ -65,10 +65,10 @@ rule make_silva:
         combine = temp("genomes/silva_filter_ncbiTaxa.fasta"),
         silva = temp(expand(
             "genomes/silva_tax/silva_{silva_ind}.fasta",
-            silva_ind=range(1, config['silva_split'] + 1)
+            silva_ind=range(1, config["parallel"]["silva"] + 1)
         ))
     params:
-        silva_split = config['silva_split'],
+        parallel = config["parallel"]["silva"],
         output_prefix = "genomes/silva_tax/silva_"
     threads: 4
     shell: """
@@ -76,7 +76,7 @@ rule make_silva:
     hts_fastx split-fasta \\
         --input-file  {output.combine} \\
         --output-prefix {params.output_prefix} \\
-        --n-batch {params.silva_split}
+        --n-batch {params.parallel}
     """
 
 

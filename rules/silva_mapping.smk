@@ -16,7 +16,7 @@ rule silva_combine:
     input: 
         expand(
             "output/06-SILVA/{{sample}}/Aligned_{silva_ind}.txt.gz",
-            silva_ind=range(1, config['silva_split'] + 1)
+            silva_ind=range(1, config["parallel"]["silva"] + 1)
         )
     output: temp("output/06-SILVA/{sample}/Aligned_combine.txt.gz")
     threads: 3,
