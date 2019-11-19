@@ -1,16 +1,13 @@
 rule genome_count:
     input:
-        gencode = config['annotations'].get('gencode') \
-                or 'genomes/gencode_human_annotation.gtf',
-        tRNA = config['annotations'].get('tRNA') \
-                or 'genomes/tRNA.gtf',
-        piRNA = config['annotations'].get('piRNA') \
-                or 'genomes/piRNA.gtf',
+        gencode = 'genomes/gencode_human_annotation.gtf',
+        tRNA = 'genomes/tRNA.gtf',
+        piRNA = 'genomes/piRNA.gtf',
         bam="output/04-Genome/{sample}/Aligned.out.bam"
     output: 
-        gencode = "output/04-Genome/{sample}/ReadsPerGene_gencode.txt",
-        tRNA = "output/04-Genome/{sample}/ReadsPerGene_tRNA.txt",
-        piRNA = "output/04-Genome/{sample}/ReadsPerGene_piRNA.txt"
+        gencode = temp("output/04-Genome/{sample}/ReadsPerGene_gencode.txt"),
+        tRNA = temp("output/04-Genome/{sample}/ReadsPerGene_tRNA.txt"),
+        piRNA = temp("output/04-Genome/{sample}/ReadsPerGene_piRNA.txt")
     threads: 4
     shell: """
     htseq_count -f bam -s no -i gene_id \
@@ -38,3 +35,21 @@ rule summarize_counts:
         samples = list(config['samples'].keys())
     threads: 4
     script: "../src/summarize_counts.py"
+
+rule organize_endogenous:
+    input:
+        gencode = "output/04-Genome/ReadsPerGene_gencode.txt",
+        tRNA = "output/04-Genome/ReadsPerGene_tRNA.txt",
+        piRNA = "output/04-Genome/ReadsPerGene_piRNA.txt",
+        summary = "output/04-Genome/ReadsPerGene_summary.txt",
+        bam = expand("output/04-Genome/{sample}/Aligned.out.bam", sample=config["samples"]),
+    output:
+        directory("output/results/endogenous/")
+    threads: 1
+    shell: """
+    cp {input.gencode} {output}
+    cp {input.tRNA} {output}
+    cp {input.piRNA} {output}
+    cp {input.summary} {output}
+    cp {input.bam} {output}/bam/
+    """

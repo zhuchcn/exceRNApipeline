@@ -63,10 +63,10 @@ rule make_silva:
     input: expand("genomes/silva_{su}_filter_ncbiTaxa.fa.gz", su=["ssu", "lsu"])
     output:
         combine = temp("genomes/silva_filter_ncbiTaxa.fasta"),
-        silva = expand(
+        silva = temp(expand(
             "genomes/silva_tax/silva_{silva_ind}.fasta",
             silva_ind=range(1, config['silva_split'] + 1)
-        )
+        ))
     params:
         silva_split = config['silva_split'],
         output_prefix = "genomes/silva_tax/silva_"

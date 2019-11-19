@@ -1,5 +1,5 @@
 rule rrna_make_sequence:
-    input: U13369=config['genomes']['U13369']
+    input: config['rRNA']
     output: "genomes/RiboRNA_homo_sapiens.fasta"
     params: 
         rna5s1=config['urls']['rna5s1']
@@ -9,16 +9,15 @@ rule rrna_make_sequence:
         -o genomes/rna5s1.fasta \
         -H 'Content-type:text/x-fasta' \
         {params.rna5s1}
-    cat genomes/rna5s1.fasta {input.U13369} \
+    cat genomes/rna5s1.fasta {input} \
         > {output}
     """
 
 rule rrna_index:
     input:
-        genome = config['genomes'].get('rRNA') or \
-                 "genomes/RiboRNA_homo_sapiens.fasta"
+        genome = "genomes/RiboRNA_homo_sapiens.fasta"
     output: 
-        directory("genomes/star_index_rrna_human")
+        temp(directory("genomes/star_index_rrna_human"))
     params:
         extra = "--genomeSAindexNbases 8 --genomeChrBinNbits 16",
         use_scratch = config['use_scratch']
@@ -30,8 +29,8 @@ rule rrna_mapping:
         genome = "genomes/star_index_rrna_human",
         sample = "output/02-UniVec/{sample}/Unmapped.fastq.gz"
     output:
-        bam="output/03-rRNA/{sample}/Aligned.out.bam",
-        unmapped="output/03-rRNA/{sample}/Unmapped.fastq.gz"
+        bam=temp("output/03-rRNA/{sample}/Aligned.out.bam"),
+        unmapped=temp("output/03-rRNA/{sample}/Unmapped.fastq.gz")
     params:
         prefix="output/03-rRNA/{sample}/",
         use_scratch = config['use_scratch']

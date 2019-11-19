@@ -7,10 +7,10 @@ BACTERIA_COLLECTION_INDICES = EnsemblFTP().get_bacteria_collection_numbers()
 
 rule bacteria_download_genomes:
     output: 
-        expand(
+        temp(expand(
             "genomes/bacteria/fasta/bacteria_{bacteria_ind}_collection",
             bacteria_ind=BACTERIA_COLLECTION_INDICES
-        )
+        ))
     params:
         version = config.get("version") or "current",
         output_dir = "genomes/bacteria/fasta"
@@ -44,7 +44,7 @@ rule bacteria_index:
     input:
         genome = "geomes/bacteria/fasta/bacteria_{bacteria_ind}_collection.fasta" 
     output: 
-        temp(directory("genomes/bacteria/star_index/bacteria_{bacteria_ind}_collection"))
+        temp(directory("genomes/bacteria/star_index/bacteria_{bacteria_ind}_collection/"))
     params:
         extra = "--genomeSAindexNbases 13 --genomeChrBinNbits 16",
         use_scratch = config['use_scratch']
@@ -53,7 +53,7 @@ rule bacteria_index:
 
 rule bacteria_mapping:
     input:
-        genome_index = "genomes/bacteria/star_index/bacteria_{bacteria_ind}_collection",
+        genome_index = "genomes/bacteria/star_index/bacteria_{bacteria_ind}_collection/",
         sample = "output/06-SILVA/{sample}/Unmapped.fastq.gz"
     output: 
         temp("output/07-Bacteria/{sample}/Aligned_{bacteria_ind}.txt.gz")
@@ -122,3 +122,16 @@ rule bacteria_count_combine:
             else:
                 counts = counts.join(new_counts, how='outer')
         counts.to_csv(output, sep='\t')
+
+rule organize_exogenous:
+    input:
+        silva = expand("output/06-SILVA/SILVA_count_{tax}.txt",tax=config["tax_levels"]),
+        bacteria = expand("output/07-Bacteria/bacteria_count_{tax}.txt",tax=config["tax_levels"])
+    output:
+        silva = directory("output/results/silva/"),
+        bacteria = directory("output/results/bacteria/")
+    threads: 1
+    shell: """
+    cp -r {input.silva} {output.silva}
+    cp -r {input.bacteria} {output.bacteria} 
+    """

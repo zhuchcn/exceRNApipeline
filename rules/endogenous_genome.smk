@@ -9,10 +9,9 @@ rule genome_download:
 
 rule genome_index:
     input:
-        genome=config["genomes"].get('human') or \
-            "genomes/human_genome_primary_assembly.fa"
+        genome = "genomes/human_genome_primary_assembly.fa"
     output: 
-        directory("genomes/star_index_human_genome")
+        temp(directory("genomes/star_index_human_genome"))
     params:
         extra = "--genomeSAindexNbases 14 --genomeChrBinNbits 18",
         use_scratch = config['use_scratch']
@@ -25,7 +24,7 @@ rule genome_mapping:
         sample = "output/03-rRNA/{sample}/Unmapped.fastq.gz"
     output:
         bam="output/04-Genome/{sample}/Aligned.out.bam",
-        unmapped="output/04-Genome/{sample}/Unmapped.fastq.gz"
+        unmapped=temp("output/04-Genome/{sample}/Unmapped.fastq.gz")
     params:
         prefix="output/04-Genome/{sample}/",
         use_scratch = config['use_scratch']

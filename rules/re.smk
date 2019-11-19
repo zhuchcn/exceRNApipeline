@@ -1,5 +1,5 @@
 rule download_repeat_masker:
-    output: "genomes/repeat_masker.fa.out"
+    output: temp("genomes/repeat_masker.fa.out")
     params: url = config['urls']['repeat_masker']
     threads: 1
     shell: """
@@ -22,7 +22,7 @@ rule make_re_fasta:
 rule re_index:
     input: genome = "genomes/RepeatMasker.fa"
     output: 
-        directory("genomes/star_index_re")
+        temp(directory("genomes/star_index_re"))
     params:
         extra = "--genomeSAindexNbases 14 --genomeChrBinNbits 8",
         use_scratch = config['use_scratch']
@@ -34,8 +34,8 @@ rule re_mapping:
         genome="genomes/star_index_re",
         sample="output/04-Genome/{sample}/Unmapped.fastq.gz"
     output:
-        bam="output/05-RE/{sample}/Aligned.out.bam",
-        unmapped="output/05-RE/{sample}/Unmapped.fastq.gz"
+        bam=temp("output/05-RE/{sample}/Aligned.out.bam"),
+        unmapped=temp("output/05-RE/{sample}/Unmapped.fastq.gz")
     params:
         prefix="output/05-RE/{sample}/",
         use_scratch = config['use_scratch']
