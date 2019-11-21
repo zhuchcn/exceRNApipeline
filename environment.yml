@@ -12,6 +12,7 @@ dependencies:
   - async-timeout=3.0.1=py_1000
   - attrs=19.3.0=py_0
   - bcrypt=3.1.7=py37h516909a_0
+  - biopython=1.74=py37h516909a_0
   - boost=1.70.0=py37h9de70de_1
   - boost-cpp=1.70.0=h8e57a91_2
   - boto3=1.10.19=py_0
