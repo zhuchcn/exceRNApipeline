@@ -59,7 +59,7 @@ Set up the slurm options by modifying the `slurm_config.yml` file. The default s
 export USER_EMAIL=you@email.com
 ```
 
-### Run pipeline
+## Run pipeline
 
 When all configurations are set up, activate the conda environement, and run the pipeline using the following command.
 
@@ -78,19 +78,26 @@ Use the flag '-h' to get some help.
 ./snakemakeslurm -h
 ```
 
-### Results
+## Results
 
-The results are in the `output` folder. The per gene read counts for gencode mapped genes, tRNAs, and piRNAs, as well as a gene type summary table, are in a subfolder named `04-Genome`. Taxa count of reads mapped to exogenous databases are in the `06-SILVA` and `07-Bacteria` subfolders.
+The results of the pipeline are outputted to the `output` folder. Each of the 7 steps described above has its own folder. The per gene count for endogenous genes, tRNAs, and piRNAs, as well as a gene type summary table, the taxa counts mapped to exogenous databases are copied to the `output/results` folder. The bam files mapped to endogenous genome are saved in the `output/04-Genome`, in each sample's directory. The bam files mapping to exogenous databases are not saved.
 
-### clean scratches
+## clean scratches
 
-If scratch is used, the files in scratch should be removed by the pipeline automatically. However in case that jobs are stopped or cancelled in the middle, the scratch files will stays no the node in the `/scratch` folder. In those above mentioned cases, use the command below to clean the scratches.
+If scratch is used, the files in scratch should be removed by the pipeline automatically. However in case that jobs are stopped due to errors or cancelled in the middle, the scratch files will stay in the `/scratch` folder of the node that the job was ran. In this case, use the command below to clean the scratches.
 
 ```
 ./snakemakeslurm --clean-scratch
 ```
 
-A `slurm_job_status` folder will be created after jobs are submitted. So basically, if the `slurm_job_status` is not empty, run the commdan above.
+A `slurm_job_status` folder will be created after jobs are submitted. So basically, if the `slurm_job_status` is not empty, run the command above.
+
+## Generate pipeline report
+
+Snakemake supports pipeline report out of box. To generate the report, use the command below:
+```
+snakemake --report report.html
+```
 
 ## TODO
 
