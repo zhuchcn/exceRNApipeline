@@ -36,13 +36,12 @@ rule summarize_counts:
     threads: 4
     script: "../src/summarize_counts.py"
 
-rule organize_endogenous:
+rule organize_endogenous_counts:
     input:
         gencode = "output/04-Genome/ReadsPerGene_gencode.txt",
         tRNA = "output/04-Genome/ReadsPerGene_tRNA.txt",
         piRNA = "output/04-Genome/ReadsPerGene_piRNA.txt",
-        summary = "output/04-Genome/ReadsPerGene_summary.txt",
-        bam = expand("output/04-Genome/{sample}/Aligned.out.bam", sample=config["samples"]),
+        summary = "output/04-Genome/ReadsPerGene_summary.txt"
     output:
         directory("output/results/endogenous/")
     threads: 1
@@ -51,5 +50,4 @@ rule organize_endogenous:
     cp {input.tRNA} {output}
     cp {input.piRNA} {output}
     cp {input.summary} {output}
-    cp {input.bam} {output}/bam/
     """

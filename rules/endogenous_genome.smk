@@ -27,7 +27,8 @@ rule genome_mapping:
         unmapped=temp("output/04-Genome/{sample}/Unmapped.fastq.gz")
     params:
         prefix="output/04-Genome/{sample}/",
-        use_scratch = config['use_scratch']
+        use_scratch = config['use_scratch'],
+        ram = config["endogenous_align_ram"]
     threads: 24
     script: '../src/star_align.py'
 

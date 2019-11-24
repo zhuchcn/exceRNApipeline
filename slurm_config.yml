@@ -9,48 +9,32 @@ __default__:
     output: "slurmout/SM_{rule}_%A.log"
     error: "slurmout/SM_{rule}_%A.err"
     mail-user: "$USER_EMAIL"
-    mail-type: "END,FAIL"
+    mail-type: "FAIL"
     exclude: "''"
 
-preprocess:
-    exclude: "c8-96"
-
-univec_index:
-    exclude: "c8-96"
-
-univec_mapping:
-    exclude: "c8-96"
-
-rrna_index:
-    exclude: "c8-96"
-
-rrna_mapping:
-    exclude: "c8-96"
-
 genome_index:
-    exclude: "c8-96"
     mem: 50G
 
 genome_mapping:
-    exclude: "c8-96"
     mem: 60G
 
 make_re_fasta:
     mem: 60G
 
 re_index:
-    exclude: "c8-96"
     mem: 60G
 
 re_mapping:
-    exclude: "c8-96"
     mem: 60G
 
 silva_index:
-    exclude: "c8-96"
     mem: 30G
 
 silva_mapping:
-    exclude: "c8-96"
     mem: 30G
-    mail-type: NONE
+
+bacteria_index:
+    mem: 44G
+
+bacteria_mapping:
+    mem: 60G

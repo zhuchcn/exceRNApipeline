@@ -15,6 +15,11 @@ if snakemake.input.genome.startswith('/'):
     input_genome = snakemake.input.genome
 else:
     input_genome = os.path.join(os.getcwd(), snakemake.input.genome)
+
+mem = snakemake.params.get("mem") or max(
+    31000000000, snakemake.threads * 2 * 1024 * 1024 * 1024
+)
+
 cmd = f"""
     cd {wd}
     mkdir {genome_dir}
@@ -22,7 +27,8 @@ cmd = f"""
         --runMode genomeGenerate \\
         --genomeFastaFiles {input_genome} \\
         --genomeDir {genome_dir} \\
-        --runThreadN {snakemake.threads} 
+        --runThreadN {snakemake.threads} \\
+        --limitGenomeGenerateRAM {mem}
 """
 shell(cmd)
 

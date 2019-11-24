@@ -12,6 +12,7 @@ Data processing pipeline for extracellular small RNA-seq from human specimen. Th
 
 The aligner STAR is used to align reads to database/genome. The pipeline [exceRpt](https://github.com/gersteinlab/exceRpt) was used as reference. The advantage of this pipeline is that it can take the advantage of HPC's full power by submitting jobs in parallel using SLURM.
 
+![dag](dag.svg)
 
 ## Installation
 
@@ -65,6 +66,16 @@ When all configurations are set up, activate the conda environement, and run the
 ```
 conda activate exceRNApipeline
 ./snakemakeslurm
+```
+
+Use the flag '-s' to parse snakemake arguments. The following command will submit at most 20 jobs parallel.
+```
+./snakemakeslurm -s "-j 20"
+```
+
+Use the flag '-h' to get some help.
+```
+./snakemakeslurm -h
 ```
 
 ### Results

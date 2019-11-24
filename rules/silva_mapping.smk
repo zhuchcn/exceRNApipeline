@@ -8,7 +8,7 @@ rule silva_mapping:
     params:
         prefix="06-SILVA/{sample}/Aligned_{silva_ind}/",
         use_scratch = config['use_scratch'],
-        ram="64424509440"
+        ram=config["silva_align_ram"]
     threads: 12
     script: '../src/star_align_silva.py'
 
@@ -70,7 +70,7 @@ rule silva_count_combine:
         counts = None
         for sample in config["samples"].keys():
             path = 'output/06-SILVA/' + sample + '/exogenousAligned_SILVA_' + \
-                   wildcards.tax + 'txt'
+                   wildcards.tax + '.txt'
             new_counts = read_csv(
                 path, sep='\t', index_col=0, names=[sample]
             )
@@ -78,7 +78,7 @@ rule silva_count_combine:
                 counts = new_counts
             else:
                 counts = counts.join(new_counts, how='outer')
-        counts.to_csv(output, sep='\t')
+        counts.to_csv(output[0], sep='\t')
         
 rule silva_extract_unmapped:
     input:

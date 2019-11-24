@@ -1,4 +1,4 @@
-#!/bin/bash -l
+#!/bin/bash
 
 function help {
     echo "snakemakeslurm - submit this snakemake pipeline with slurm"
@@ -15,19 +15,20 @@ function help {
 }
 
 function clean_scratch {
-    if [ !"$(ls -A )" ]
+    slurm_job_status_dir=slurm_job_status
+    if [ ! "$(ls -A $slurm_job_status_dir)" ]
     then
         echo "no scratch usage record found"
         exit 0
     fi
     echo 'cleaning scratches...'
-    for job in $(ls slurm_job_status)
+    for job in $(ls $slurm_job_status_dir)
     do
-        hostname=$(cat slurm_job_status/$job)
+        hostname=$(cat $slurm_job_status_dir/$job)
         echo "$hostname $job"
         ssh $hostname rm -rf /scratch/$job
     done
-    rm slurm_job_status/*
+    rm $slurm_job_status_dir/*
 }
 
 function main {
@@ -51,9 +52,13 @@ function main {
     # prompt a message if USER_EMAIL is not set
     if [ -z "$USER_EMAIL" ]
     then
-        echo "warning: USER_EMAIL is not set. Emails will not be sent. To set email, use the command:"
-        echo "export USER_EMAIL=youremail@example.com"
-        USER_EMAIL="null"
+        echo "warning: USER_EMAIL is not set. Do you want to set it up?"
+        read -p "Enter email (press <ENTER> if you don't want): " -r
+        if [ $REPLY != "" ]; then
+            USER_EMAIL=$REPLY
+        else
+            USER_EMAIL="null"
+        fi
     fi
 
     mkdir -p slurmout
@@ -62,9 +67,9 @@ function main {
             -N 1 -n 1 -t 14-0 --mail-user $USER_EMAIL --mail-type ALL \
             -o slurmout/snakemake_%A.log -e slurmout/snakemake_%A.err \
         snakemake \
-            $* \
             -j 999 \
-            --latency-wait 30 \
+            --latency-wait 60 \
+            $* \
             --cluster-config $(dirname $0)/slurm_config.yml \
             --cluster "sbatch $SM_ARGS" \
         &

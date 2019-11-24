@@ -5,7 +5,14 @@ import argparse
 import math
 from magic import from_file
 from pathos.multiprocessing import ProcessingPool as Pool
-from src.utils import log
+import time
+
+import sys
+__path = os.path.dirname(os.path.abspath(__file__))
+if __path not in sys.path:
+    sys.path.insert(0, __path)
+
+from utils import log
 
 
 class EnsemblFTP():
@@ -69,7 +76,19 @@ def getBacteriaGenomes(outdir, version, threads, verbose=False):
         ftp = EnsemblFTP()
         for species_url in ftp.ls(collection):
             output_dir = os.path.join(outdir, os.path.basename(collection))
-            ftp.getGenome(species_url, output_dir, verbose)
+            i = 0
+            # There seems to be an issue that the ftp blocks it after certain 
+            # time of downloading. Wasn't sure that the cause.
+            while i < 10:
+                try:
+                    ftp.getGenome(species_url, output_dir, False)
+                    break
+                except ConnectionRefusedError as e:
+                    log("sleep for 60 seconds..")
+                    time.sleep(60)
+                    i += 1
+            else:
+                raise e
         return
     
     with Pool(threads) as p:

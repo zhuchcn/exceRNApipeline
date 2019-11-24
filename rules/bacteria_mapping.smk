@@ -7,13 +7,16 @@ BACTERIA_COLLECTION_INDICES = EnsemblFTP().get_bacteria_collection_numbers()
 
 rule bacteria_download_genomes:
     output: 
-        temp(expand(
+        # FIXME: The bacteria genomes are not marked as temp for now, but
+        # should be removed in the end of the day.
+        directory(expand(
             "genomes/bacteria/fasta/bacteria_{bacteria_ind}_collection",
             bacteria_ind=BACTERIA_COLLECTION_INDICES
         ))
     params:
         version = config.get("version") or "current",
-        output_dir = "genomes/bacteria/fasta"
+        output_dir = "genomes/bacteria/fasta",
+        use_scratch = config["use_scratch"]
     threads: 24
     script: '../src/bacteria_download.py'
 
@@ -33,35 +36,36 @@ def bacteria_index_prev(wildcards):
 
 rule bacteria_combine_genome:
     input:
-        genome_collection = "genomes/bacteria/fasta/bacteria_{bacteria_ind}_collection",     
+        genome_collection = "genomes/bacteria/fasta/bacteria_{bacteria_ind}_collection",
         prev = bacteria_index_prev
     output:
-        temp("geomes/bacteria/fasta/bacteria_{bacteria_ind}_collection.fasta")
+        temp("genomes/bacteria/fasta/bacteria_{bacteria_ind}_collection.fasta")
     threads: 2
     shell: "zcat {input.genome_collection}/*.fa.gz > {output}"
 
 rule bacteria_index:
     input:
-        genome = "geomes/bacteria/fasta/bacteria_{bacteria_ind}_collection.fasta" 
+        genome = "genomes/bacteria/fasta/bacteria_{bacteria_ind}_collection.fasta" 
     output: 
-        temp(directory("genomes/bacteria/star_index/bacteria_{bacteria_ind}_collection/"))
+        temp(directory("genomes/bacteria/star_index/bacteria_{bacteria_ind}_collection"))
     params:
         extra = "--genomeSAindexNbases 13 --genomeChrBinNbits 16",
-        use_scratch = config['use_scratch']
-    threads: 12
+        use_scratch = config['use_scratch'],
+        mem = "47244640256"
+    threads: 16
     script: "../src/star_index.py"
 
 rule bacteria_mapping:
     input:
-        genome_index = "genomes/bacteria/star_index/bacteria_{bacteria_ind}_collection/",
+        genome = "genomes/bacteria/star_index/bacteria_{bacteria_ind}_collection",
         sample = "output/06-SILVA/{sample}/Unmapped.fastq.gz"
     output: 
         temp("output/07-Bacteria/{sample}/Aligned_{bacteria_ind}.txt.gz")
     params:
-        prefix="06-SILVA/{sample}/Aligned_{silva_ind}/",
+        prefix = lambda wildcards: f"06-SILVA/{wildcards.sample}/Aligned_{wildcards.bacteria_ind}/",
         use_scratch = config['use_scratch'],
-        ram="34359738368"
-    threads: 16
+        ram = config["bacteria_align_ram"]
+    threads: 24
     script: "../src/star_align_bacteria.py"
 
 rule bacteria_combine_result:
@@ -113,7 +117,7 @@ rule bacteria_count_combine:
         counts = None
         for sample in config["samples"].keys():
             path = 'output/07-Bacteria/' + sample + '/exogenousAligned_bacteria_' + \
-                   wildcards.tax + 'txt'
+                   wildcards.tax + '.txt'
             new_counts = read_csv(
                 path, sep='\t', index_col=0, names=[sample]
             )
@@ -121,7 +125,7 @@ rule bacteria_count_combine:
                 counts = new_counts
             else:
                 counts = counts.join(new_counts, how='outer')
-        counts.to_csv(output, sep='\t')
+        counts.to_csv(output[0], sep='\t')
 
 rule organize_exogenous:
     input:

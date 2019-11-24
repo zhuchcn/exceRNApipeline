@@ -41,3 +41,7 @@ tax_levels:
     - "family"
     - "genus"
     - "species"
+
+endogenous_align_ram: "64424509440"
+bacteria_align_ram: "64424509440"
+silva_align_ram: "64424509440"

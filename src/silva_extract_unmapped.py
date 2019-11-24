@@ -14,11 +14,12 @@ else:
     output = os.path.basenaem(snakemake.output.unmapped)
 
 shell(f"""
-    zcat {snakemake.input.aligned} | cut -f 1 | sort | uniq >> {namelist}
+    zcat {snakemake.input.aligned} |\\
+        cut -f 1 | sort | uniq >> {namelist}
     hts_fastx extract-fastx \\
-        --input-file {snakemake.aligned} \\
+        --input-file {snakemake.input.fastq} \\
         --output-file {output} \\
-        --namelist-file $namelist_file \\
+        --namelist-file {namelist} \\
         -v -u
 """)
 
