@@ -8,3 +8,4 @@ output
 genomes
 report.html
 __pycache__
+*.sif

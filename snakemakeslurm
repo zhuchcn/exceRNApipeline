@@ -32,16 +32,6 @@ function clean_scratch {
 }
 
 function main {
-    if [ "$(basename $CONDA_PREFIX)" != "exceRNApipeline" ]; then
-        read -p "Conda environment is not activated. Activate it? [Y/n]" -n 1 -r
-        if [ $REPLY == "Y" ]; then
-            call="conda activate exceRNApipeline"
-            echo -e "\n$call"
-            eval $call
-            echo $(which python)
-        fi
-    fi
-
     SM_PARAMS="job-name partition mail-user mail-type output error time nodes mem exclude"
     SM_ARGS="--ntasks {threads} --mem-per-cpu {cluster.mem-per-cpu}"
     for P in ${SM_PARAMS}

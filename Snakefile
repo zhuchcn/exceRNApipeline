@@ -1,5 +1,7 @@
 shell.prefix("set +o pipefail; ")
 
+singularity: "docker://zhuchcn/exce-rna-pipeline:latest"
+
 configfile: "default_config.yml"
 configfile: "pipeline_config.yml"
 
