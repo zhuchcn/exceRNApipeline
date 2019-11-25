@@ -21,7 +21,10 @@ Clone the repository
 git clone https://github.com/zhuchcn/exceRNAseq.git
 ```
 
-Install the dependencies using conda
+There are two ways to set up your environment, conda and docker. Conda installs all dependencies while with docker, all dependencies were already pre-installed in a docker image. 
+
+### conda
+
 ```bash
 conda env create -f environment.yml
 ```
@@ -31,12 +34,17 @@ Or run the command through srun (your system administrator(s) will probably be h
 srun -N 1 -n 1 -t 1-0 conda env create -f environment.yml
 ```
 
-Alternatively, you can use the pre-built docker image with [singularity](https://sylabs.io/docs/). The pipeline should pull the image from docker-hub directly, but just in case it doesn't:
+### docker
+
+In theory, no thing needs to be done if you are using docker. The pipeline should pull the image from docker-hub directly, but just in case it doesn't:
 ```bash
 singularity pull docker://zhuchcn/exce-rna-pipeline
 ```
-
-The docker image has all the softwares installed and this is the **recommended** way to run the pipeline.
+To be noticed that, the `snakemake` is still required in this way, which can be installed with conda.
+```bash
+conda install snakemake
+```
+This is the **recommended** way.
 
 ## pipeline configuration
 
