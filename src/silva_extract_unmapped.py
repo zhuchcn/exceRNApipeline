@@ -4,7 +4,7 @@ import os
 
 
 if snakemake.params.scratch:
-    slurm = SlurmJob()
+    slurm = SlurmJob(snakemake.params.scratch)
     slurm.setUp()
     sample = snakemake.wildcards.sample
     namelist = f"{slurm.scratch}/aligned_reads.txt"

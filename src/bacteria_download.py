@@ -5,7 +5,7 @@ from utils import SlurmJob
 
 
 if snakemake.params.scratch:
-    slurm = SlurmJob()
+    slurm = SlurmJob(snakemake.params.scratch)
     slurm.setUp()
     output_dir = os.path.join(slurm.scratch, "bacteria_genomes")
 else:
