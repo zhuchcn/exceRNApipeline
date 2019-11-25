@@ -7,16 +7,15 @@ rule silva_mapping:
         silva_ind="[0-9]+"
     params:
         prefix="06-SILVA/{sample}/Aligned_{silva_ind}/",
-        use_scratch = config['use_scratch'],
-        ram=config["silva_align_ram"]
-    threads: 12
+        scratch = config.get('scratch')
+    threads: config["silva_align_cpu"]
     script: '../src/star_align_silva.py'
 
 rule silva_combine:
     input: 
         expand(
             "output/06-SILVA/{{sample}}/Aligned_{silva_ind}.txt.gz",
-            silva_ind=range(1, config["parallel"]["silva"] + 1)
+            silva_ind=range(1, config["silva_align_parallel"] + 1)
         )
     output: temp("output/06-SILVA/{sample}/Aligned_combine.txt.gz")
     threads: 3,
@@ -88,6 +87,6 @@ rule silva_extract_unmapped:
         unmapped = "output/06-SILVA/{sample}/Unmapped.fastq.gz",
     params:
         namelist_path = "output/06-SILVA/{sample}/aligned_reads.txt",
-        use_scratch = config["use_scratch"]
+        scratch = config.get("scratch")
     threads: 3
     script: '../src/silva_extract_unmapped.py'

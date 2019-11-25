@@ -1,9 +1,5 @@
 exogenous_mapping: false
 
-parallel:
-    silva: 10
-    bacteria: 10
-
 urls:
     # The univec library from NCBI
     univec: "ftp://ftp.ncbi.nlm.nih.gov/pub/UniVec/UniVec_Core"
@@ -42,6 +38,30 @@ tax_levels:
     - "genus"
     - "species"
 
-endogenous_align_ram: "64424509440"
-bacteria_align_ram: "64424509440"
-silva_align_ram: "64424509440"
+univec_index_cpu: 8
+univec_align_cpu: 12
+
+rrna_index_cpu: 8
+rrna_align_cpu: 12
+
+endogenous_index_ram_gb: 60
+endogenous_index_cpu: 12
+endogenous_align_cpu: 24
+
+mirbase_index_cpu: 12
+mirbase_align_cpu: 16
+
+re_index_ram_gb: 60
+re_index_cpu: 24
+re_align_cpu: 24
+
+silva_align_parallel: 10
+silva_index_ram_gb: 30
+silva_index_cpu: 12
+silva_align_cpu: 12
+
+bacteria_download_cpu: 24
+bacteria_align_parallel: 10
+bacteria_index_ram_gb: 44
+bacteria_index_cpu: 16
+bacteria_align_cpu: 24

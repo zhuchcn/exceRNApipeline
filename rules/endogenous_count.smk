@@ -10,14 +10,14 @@ rule genome_count:
         piRNA = temp("output/04-Genome/{sample}/ReadsPerGene_piRNA.txt")
     threads: 4
     shell: """
-    htseq_count -f bam -s no -i gene_id \
-        --additional-attr gene_name --additional-attr gene_type \
+    htseq-count -f bam -s no -i gene_id \\
+        --additional-attr gene_name --additional-attr gene_type \\
         {input.bam} {input.gencode} > {output.gencode}
-    htseq_count -f bam -s no -i gene_id \
-        --additional-attr gene_name --additional-attr gene_type \
+    htseq-count -f bam -s no -i gene_id \\
+        --additional-attr gene_name --additional-attr gene_type \\
         {input.bam} {input.tRNA} > {output.tRNA};
-    htseq_count -f bam -s no -i gene_id \
-        --additional-attr gene_name --additional-attr gene_type \
+    htseq-count -f bam -s no -i gene_id \\
+        --additional-attr gene_name --additional-attr gene_type \\
         {input.bam} {input.piRNA} > {output.piRNA};
     """
 

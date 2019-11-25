@@ -3,15 +3,15 @@ from snakemake.shell import shell
 from utils import SlurmJob
 
 
-if snakemake.params.get('use_scratch'):
-    slurm = SlurmJob()
+if snakemake.params.scratch:
+    slurm = SlurmJob(snakemake.params.scratch)
     slurm.setUp()
     sample = snakemake.wildcards.sample
     index = snakemake.wildcards.bacteria_ind
     output_prefix = f'{slurm.scratch}/{sample}/bacteria_{index}_'
     os.mkdir(os.path.join(slurm.scratch, sample))
 else:
-    output_prefix = snakemake.prams.prefix
+    output_prefix = snakemake.params.prefix
 
 extra_args = snakemake.params.get('extra')
 if extra_args is None:
@@ -26,7 +26,6 @@ STAR \\
     --genomeDir {snakemake.input.genome} \\
     --outFileNamePrefix {output_prefix} \\
     --runThreadN {snakemake.threads} \\
-    --limitBAMsortRAM {snakemake.params.ram} \\
     --outSAMtype BAM Unsorted \\
     --outSAMattributes  Standard \\
     --readFilesCommand  zcat \\
@@ -47,7 +46,7 @@ samtools view \\
     > {snakemake.output}
 """)
 
-if snakemake.params.get('use_scratch'):
+if snakemake.params.scratch:
     slurm.tearDown()
 else:
     shell(f"rm -rf {snakemake.params.prefix}*")

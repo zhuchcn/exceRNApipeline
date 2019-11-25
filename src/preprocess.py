@@ -2,8 +2,8 @@ from snakemake.shell import shell
 from utils import SlurmJob
 
 
-if snakemake.params.get('use_scratch'):
-    slurm = SlurmJob()
+if snakemake.params.scratch:
+    slurm = SlurmJob(snakemake.params.scratch)
     slurm.setUp()
     sample = snakemake.wildcards.sample
     prefix = f'{slurm.scratch}/{sample}'
@@ -21,9 +21,9 @@ shell(f"""
     hts_Stats -A -L {log} -f {prefix}
 """)
 
-if snakemake.params.get('use_scratch'):
+if snakemake.params.scratch:
     shell(f"""
     mv {slurm.scratch}/{sample}_SE.fastq.gz  {snakemake.output}
-    mv ){slurm.scratch}/{sample}.htsStats.log  {snakemake.log}
+    mv {slurm.scratch}/{sample}.htsStats.log  {snakemake.log}
     """)
     slurm.tearDown()

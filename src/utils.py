@@ -5,17 +5,18 @@ from datetime import datetime
 
 
 class SlurmJob():
-    def __init__(self):
+    def __init__(self, scratch):
         print('Slurm init')
         self.hostname = shell('hostname', read=True).decode('utf-8').rstrip()
         self.slurm_jobid = shell("echo ${{SLURM_JOBID}}", read=True)\
             .decode('utf-8').rstrip()
         self.user = shell('echo ${{USER}}', read=True)\
             .decode('utf-8').rstrip()
+        self.scratch_path = scratch
     
     @property
     def scratch(self):
-        return f'/scratch/{self.user}_{self.slurm_jobid}'
+        return f'{self.scratch_path}/{self.user}_{self.slurm_jobid}'
     
     @property
     def logfile(self):

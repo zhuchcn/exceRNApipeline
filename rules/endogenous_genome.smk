@@ -14,8 +14,9 @@ rule genome_index:
         temp(directory("genomes/star_index_human_genome"))
     params:
         extra = "--genomeSAindexNbases 14 --genomeChrBinNbits 18",
-        use_scratch = config['use_scratch']
-    threads: 12
+        scratch = config.get('scratch'),
+        mem = config["endogenous_index_ram_gb"]
+    threads: config["endogenous_index_cpu"]
     script: '../src/star_index.py'
 
 rule genome_mapping:
@@ -27,9 +28,8 @@ rule genome_mapping:
         unmapped=temp("output/04-Genome/{sample}/Unmapped.fastq.gz")
     params:
         prefix="output/04-Genome/{sample}/",
-        use_scratch = config['use_scratch'],
-        ram = config["endogenous_align_ram"]
-    threads: 24
+        scratch = config.get('scratch')
+    threads: config["endogenous_align_cpu"]
     script: '../src/star_align.py'
 
 rule make_genome_annotation:

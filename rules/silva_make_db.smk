@@ -65,10 +65,10 @@ rule make_silva:
         combine = temp("genomes/silva_filter_ncbiTaxa.fasta"),
         silva = temp(expand(
             "genomes/silva_tax/silva_{silva_ind}.fasta",
-            silva_ind=range(1, config["parallel"]["silva"] + 1)
+            silva_ind=range(1, config["silva_align_parallel"] + 1)
         ))
     params:
-        parallel = config["parallel"]["silva"],
+        parallel = config["silva_align_parallel"],
         output_prefix = "genomes/silva_tax/silva_"
     threads: 4
     shell: """
@@ -89,6 +89,7 @@ rule silva_index:
         silva_ind="[0-9]+"
     params:
         extra = "--genomeSAindexNbases 10 --genomeChrBinNbits 7",
-        use_scratch = config['use_scratch']
-    threads: 12
+        scratch = config.get('scratch'),
+        mem = config["silva_index_ram_gb"]
+    threads: config["silva_index_cpu"]
     script: '../src/star_index.py'

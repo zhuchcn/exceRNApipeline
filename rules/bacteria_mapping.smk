@@ -16,13 +16,13 @@ rule bacteria_download_genomes:
     params:
         version = config.get("version") or "current",
         output_dir = "genomes/bacteria/fasta",
-        use_scratch = config["use_scratch"]
-    threads: 24
+        scratch = config.get('scratch')
+    threads: config["bacteria_download_cpu"]
     script: '../src/bacteria_download.py'
 
 def bacteria_index_prev(wildcards):
     ind = int(wildcards.bacteria_ind)
-    jobs = config["parallel"]["bacteria"]
+    jobs = config["bacteria_align_parallel"]
     indices = BACTERIA_COLLECTION_INDICES
     inds_each_job = [indices[start::jobs] for start in range(jobs)]
     cuts = [len(x) for x in inds_each_job]
@@ -50,9 +50,9 @@ rule bacteria_index:
         temp(directory("genomes/bacteria/star_index/bacteria_{bacteria_ind}_collection"))
     params:
         extra = "--genomeSAindexNbases 13 --genomeChrBinNbits 16",
-        use_scratch = config['use_scratch'],
-        mem = "47244640256"
-    threads: 16
+        scratch = config.get('scratch'),
+        mem = config["bacteria_index_ram_gb"]
+    threads: config["bacteria_index_cpu"]
     script: "../src/star_index.py"
 
 rule bacteria_mapping:
@@ -63,9 +63,8 @@ rule bacteria_mapping:
         temp("output/07-Bacteria/{sample}/Aligned_{bacteria_ind}.txt.gz")
     params:
         prefix = lambda wildcards: f"06-SILVA/{wildcards.sample}/Aligned_{wildcards.bacteria_ind}/",
-        use_scratch = config['use_scratch'],
-        ram = config["bacteria_align_ram"]
-    threads: 24
+        scratch = config.get('scratch')
+    threads: config["bacteria_align_cpu"]
     script: "../src/star_align_bacteria.py"
 
 rule bacteria_combine_result:
@@ -127,6 +126,7 @@ rule bacteria_count_combine:
                 counts = counts.join(new_counts, how='outer')
         counts.to_csv(output[0], sep='\t')
 
+
 rule organize_exogenous:
     input:
         silva = expand("output/06-SILVA/SILVA_count_{tax}.txt",tax=config["tax_levels"]),
@@ -139,3 +139,4 @@ rule organize_exogenous:
     cp -r {input.silva} {output.silva}
     cp -r {input.bacteria} {output.bacteria} 
     """
+    

@@ -20,8 +20,9 @@ rule rrna_index:
         temp(directory("genomes/star_index_rrna_human"))
     params:
         extra = "--genomeSAindexNbases 8 --genomeChrBinNbits 16",
-        use_scratch = config['use_scratch']
-    threads: 8
+        scratch = config.get('scratch'),
+        mem = config.get("rrna_index_mem_gb")
+    threads: config["rrna_index_cpu"]
     script: '../src/star_index.py'
 
 rule rrna_mapping:
@@ -33,6 +34,6 @@ rule rrna_mapping:
         unmapped=temp("output/03-rRNA/{sample}/Unmapped.fastq.gz")
     params:
         prefix="output/03-rRNA/{sample}/",
-        use_scratch = config['use_scratch']
-    threads: 12
+        scratch = config.get('scratch')
+    threads: config["rrna_align_cpu"]
     script: '../src/star_align.py'

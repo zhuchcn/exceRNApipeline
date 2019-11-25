@@ -3,8 +3,8 @@ from snakemake.shell import shell
 from utils import SlurmJob
 
 
-if snakemake.params.get('use_scratch'):
-    slurm = SlurmJob()
+if snakemake.params.scratch:
+    slurm = SlurmJob(snakemake.params.scratch)
     slurm.setUp()
     wd = slurm.scratch
 else:
@@ -16,9 +16,8 @@ if snakemake.input.genome.startswith('/'):
 else:
     input_genome = os.path.join(os.getcwd(), snakemake.input.genome)
 
-mem = snakemake.params.get("mem") or max(
-    31000000000, snakemake.threads * 2 * 1024 * 1024 * 1024
-)
+mem = snakemake.params.get("mem") or snakemake.threads * 2
+mem = mem * 1024 ** 3
 
 cmd = f"""
     cd {wd}
@@ -32,6 +31,6 @@ cmd = f"""
 """
 shell(cmd)
 
-if snakemake.params.get('use_scratch'):
+if snakemake.params.scratch:
     shell(f"mv {slurm.scratch}/{genome_dir} {snakemake.output}")
     slurm.tearDown()

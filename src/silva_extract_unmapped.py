@@ -3,7 +3,7 @@ from utils import SlurmJob
 import os
 
 
-if snakemake.params.get('use_scratch'):
+if snakemake.params.scratch:
     slurm = SlurmJob()
     slurm.setUp()
     sample = snakemake.wildcards.sample
@@ -23,7 +23,7 @@ shell(f"""
         -v -u
 """)
 
-if snakemake.params.get('use_scratch'):
+if snakemake.params.scratch:
     shell(f"mv {output} {snakemake.output.unmapped}")
     slurm.tearDown()
 else:

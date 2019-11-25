@@ -13,8 +13,9 @@ rule mirbase_index:
         directory("genomes/star_index_mirbase")
     params:
         extra = "--genomeSAindexNbases 10 --genomeChrBinNbits 7",
-        use_scratch = config['use_scratch']
-    threads: 6
+        scratch = config.get('scratch'),
+        mem = config.get("mirbase_index_mem_gb")
+    threads: config["mirbase_index_cpu"]
     script: '../src/star_index.py'
 
 rule mirbase_mapping:
@@ -26,7 +27,7 @@ rule mirbase_mapping:
         unmapped="output/06-miRBase/{sample}/Unmapped.fastq.gz"
     params:
         prefix="output/06-miRBase/{sample}/",
-        use_scratch = config['use_scratch'],
+        scratch = config.get('scratch'),
         extra="""
         --outFilterMismatchNoverLmax 0.3 \
         --outFilterMatchNminOverLread 1.0 \
@@ -34,5 +35,5 @@ rule mirbase_mapping:
         --outFilterMultimapNmax  10000 \
         --alignEndsType  EndToEnd
         """
-    threads: 16
+    threads: config["mirbase_align_cpu"]
     script: '../src/star_align.py'

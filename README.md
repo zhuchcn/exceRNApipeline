@@ -17,19 +17,26 @@ The aligner STAR is used to align reads to database/genome. The pipeline [exceRp
 ## Installation
 
 Clone the repository
-```
+```bash
 git clone https://github.com/zhuchcn/exceRNAseq.git
 ```
 
 Install the dependencies using conda
-```
+```bash
 conda env create -f environment.yml
 ```
 
 Or run the command through srun (your system administrator(s) will probably be happy if you do it in this way)
-```
+```bash
 srun -N 1 -n 1 -t 1-0 conda env create -f environment.yml
 ```
+
+Alternatively, you can use the pre-built docker image with [singularity](https://sylabs.io/docs/). The pipeline should pull the image from docker-hub directly, but just in case it doesn't:
+```bash
+singularity pull docker://zhuchcn/exce-rna-pipeline
+```
+
+The docker image has all the softwares installed and this is the **recommended** way to run the pipeline.
 
 ## pipeline configuration
 
@@ -39,11 +46,11 @@ The pipeline configuration is set up in the `pipeline_config.yml` file. The samp
 
 ### exogenous mapping
 
-Set the `exogouns_mapping` to false if you only want to map to the human genome.
+Set the `exogenous_mapping` to false if you only want to map to the human genome.
 
 ### scratch
 
-Depend on your HPC setting, some allow users to use a `/scratch` folder on each node to avoid too much IO. If your HPC does not use `/scratch`, turn the `use_scratch` off by setting it to `false`.
+Depends on your HPC, some allow users to use a `/scratch` folder on each node to avoid too much IO. If your HPC does not use `/scratch`, turn the `use_scratch` off by setting it to `false`.
 
 ### genomes and annotations
 
@@ -53,28 +60,45 @@ https://ncbi.nlm.nih.gov/nuccore/U13369.1?report=fasta
 
 ### slurm configuration
 
-Set up the slurm options by modifying the `slurm_config.yml` file. The default slurm options are set in the `__default__` seciont, but it can be overwritten for each rule in its own section. The default of the `mail-user` is reading from the environmental variable `$USER_EMAIL`. You can either change it to your own email address, or setting it in bash like:
+Set up the slurm options by modifying the `slurm_config.yml` file. The default slurm options are set in the `__default__` section, which can be overwritten for each rule in its own section. The default value for the `mail-user` is from the environmental variable `$USER_EMAIL`. You can either change it to your own email address, or set it up in bash like:
 
-```
+```bash
 export USER_EMAIL=you@email.com
 ```
 
 ## Run pipeline
 
-When all configurations are set up, activate the conda environement, and run the pipeline using the following command.
+The pipeline can be ran in a couple of different ways. You can run it with conda environment.
 
+```bash
+conda activate exceRNApipeline
+./snakemakeslurm run
 ```
+
+The recommended way to run the pipeline is through [singularity](https://sylabs.io/docs/). Singularity is a container system designated for HPC. With singularity, the pipeline pulls off the docker image with all softwares already installed. The singularity module needs to be loaded first. If you are using a HPC, it should have singularity installed. Please contact your HPC staff if it doesn't. The `snakemake` is the only thing required in this way.
+
+```bash
+module load singularity
+./snakemakeslurm run --use-singularity
+```
+
+If you want to use the `/scratch` directory of the nodes, you need to bind it to singularity. If the `/scratch` directory is not binded, singularity won't be able to use it.
+```bash
+./snakemakeslurm run --use-singularity --singularity-args "--bind /scratch:/scratch"
+```
+
+```bash
 conda activate exceRNApipeline
 ./snakemakeslurm
 ```
 
-Use the flag '-s' to parse snakemake arguments. The following command will submit at most 20 jobs parallel.
-```
-./snakemakeslurm -s "-j 20"
+Additional snakemake arguments can be parsed. For example, the following command submits at most 20 jobs in parallel.
+```bash
+./snakemakeslurm run -j 20
 ```
 
 Use the flag '-h' to get some help.
-```
+```bash
 ./snakemakeslurm -h
 ```
 
@@ -86,8 +110,8 @@ The results of the pipeline are outputted to the `output` folder. Each of the 7 
 
 If scratch is used, the files in scratch should be removed by the pipeline automatically. However in case that jobs are stopped due to errors or cancelled in the middle, the scratch files will stay in the `/scratch` folder of the node that the job was ran. In this case, use the command below to clean the scratches.
 
-```
-./snakemakeslurm --clean-scratch
+```bash
+./snakemakeslurm clean-scratch
 ```
 
 A `slurm_job_status` folder will be created after jobs are submitted. So basically, if the `slurm_job_status` is not empty, run the command above.
@@ -95,12 +119,11 @@ A `slurm_job_status` folder will be created after jobs are submitted. So basical
 ## Generate pipeline report
 
 Snakemake supports pipeline report out of box. To generate the report, use the command below:
-```
+```bash
 snakemake --report report.html
 ```
 
 ## TODO
 
 - [ ] Add workflow report.
-- [x] Add conda environment support?
-- [x] Add exogenous genomes.
+- [ ] Let the pipeline bind the `/scratch` automatically when running with singularity.

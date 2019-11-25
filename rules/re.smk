@@ -25,8 +25,9 @@ rule re_index:
         temp(directory("genomes/star_index_re"))
     params:
         extra = "--genomeSAindexNbases 14 --genomeChrBinNbits 8",
-        use_scratch = config['use_scratch']
-    threads: 24
+        scratch = config.get('scratch'),
+        mem = config["re_index_ram_gb"]
+    threads: config["re_index_cpu"]
     script: '../src/star_index.py'
 
 rule re_mapping:
@@ -38,6 +39,6 @@ rule re_mapping:
         unmapped=temp("output/05-RE/{sample}/Unmapped.fastq.gz")
     params:
         prefix="output/05-RE/{sample}/",
-        use_scratch = config['use_scratch']
-    threads: 24
+        scratch = config.get('scratch')
+    threads: config["re_align_cpu"]
     script: '../src/star_align.py'

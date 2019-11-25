@@ -11,6 +11,14 @@ report: "reports/workflow.rst"
 def all_input():
     inputs = ["output/results/endogenous/"]
     if config["exogenous_mapping"]:
+        # inputs.extend(
+        #     expand("output/06-SILVA/SILVA_count_{tax}.txt",
+        #             tax=config["tax_levels"])
+        # )
+        # inputs.extend(
+        #     expand("output/06-SILVA/SILVA_count_{tax}.txt",
+        #         tax=config["tax_levels"])
+        # )
         inputs.extend(["output/results/silva/", "output/results/bacteria/"])
     return inputs
 

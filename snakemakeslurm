@@ -3,15 +3,12 @@
 function help {
     echo "snakemakeslurm - submit this snakemake pipeline with slurm"
     echo ""
-    echo "usage: snakemakeslurm [-h] [-c --clean-scratch] [-s --snakemake-args]"
-    echo ""
-    echo "The snakemake job is submitted when no argument was used."
+    echo "usage: snakemakeslurm [-h] [clean-scratch] [run]"
     echo ""
     echo "optionals:"
+    echo "run                       run pipeline"
+    echo "clean-scratch             clean scratch temporary files in each node and exit"
     echo "-h, --help                show this help message and exit"
-    echo "-c, --clean-scratch       clean scratch temprary files in each node and exit"
-    echo "-s, --snakemake-args      snakemake args to be parsed to snakemake"
-    echo "                          must be wrapped in quotes"
 }
 
 function clean_scratch {
@@ -39,44 +36,46 @@ function main {
         SM_ARGS="$SM_ARGS --$P {cluster.$P}"
     done
 
-    # prompt a message if USER_EMAIL is not set
     if [ -z "$USER_EMAIL" ]
     then
-        echo "warning: USER_EMAIL is not set. Do you want to set it up?"
-        read -p "Enter email (press <ENTER> if you don't want): " -r
-        if [ $REPLY != "" ]; then
-            USER_EMAIL=$REPLY
-        else
-            USER_EMAIL="null"
-        fi
+        echo "warning: USER_EMAIL is not set."
     fi
+
+    args=""
+    whitespace="[[:space:]]"
+    for arg in "$@"
+    do
+        if [[ $arg =~ $whitespace ]]
+        then
+            arg=\""$arg"\"
+        fi
+        args="$args $arg"
+    done
 
     mkdir -p slurmout
 
-    srun \
+    call="srun \
             -N 1 -n 1 -t 14-0 --mail-user $USER_EMAIL --mail-type ALL \
             -o slurmout/snakemake_%A.log -e slurmout/snakemake_%A.err \
         snakemake \
             -j 999 \
             --latency-wait 60 \
-            $* \
+            $args \
             --cluster-config $(dirname $0)/slurm_config.yml \
-            --cluster "sbatch $SM_ARGS" \
-        &
+            --cluster \"sbatch $SM_ARGS\" \
+        &"
+    echo $call
+    eval $call
 }
 
-# parse arguments
-snakemake_args=""
-while [[ $# -gt 0 ]]
-do
+
+if [ $# -eq 0 ]; then help; exit 1
+else
     key="$1"
     case $key in
         -h|--help) help; exit ;;
-        -c|--clean-scratch) clean_scratch; exit ;;
-        -s|--snakemake-args) snakemake_args="$2"; shift 2 ;;
-        -*|--*) echo "unknown option: $1" >&2; help; exit 1 ;;
+        run) shift 1; main "$@"; exit ;;
+        clean-scratch) clean_scratch; exit ;;
+        *) echo "unknown option: $1" >&2; help; exit 1 ;;
     esac
-done
-
-# run snakemake
-main "$snakemake_args"
+fi
