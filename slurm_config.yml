@@ -13,7 +13,7 @@ __default__:
     exclude: "''"
 
 genome_index:
-    mem: 50G
+    mem: 60G
 
 genome_mapping:
     mem: 60G

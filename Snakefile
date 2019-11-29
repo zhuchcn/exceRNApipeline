@@ -9,16 +9,15 @@ configfile: "pipeline_config.yml"
 report: "reports/workflow.rst"
 
 def all_input():
-    inputs = ["output/results/endogenous/"]
+    inputs = [
+        "output/results/endogenous/", 
+        "output/results/qc/preprocess.tsv"
+    ]
+    inputs.extend(expand(
+        "output/results/qc/{sample}_SE_fastqc/Images/per_base_quality.png",
+        sample=config["samples"]
+    ))
     if config["exogenous_mapping"]:
-        # inputs.extend(
-        #     expand("output/06-SILVA/SILVA_count_{tax}.txt",
-        #             tax=config["tax_levels"])
-        # )
-        # inputs.extend(
-        #     expand("output/06-SILVA/SILVA_count_{tax}.txt",
-        #         tax=config["tax_levels"])
-        # )
         inputs.extend(["output/results/silva/", "output/results/bacteria/"])
     return inputs
 

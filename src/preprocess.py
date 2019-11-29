@@ -9,7 +9,7 @@ if snakemake.params.scratch:
     prefix = f'{slurm.scratch}/{sample}'
     log = f'{slurm.scratch}/{sample}.htsStats.log'
 else:
-    log = snakemake.log
+    log = snakemake.output.log
     prefix = snakemake.params.prefix
 
 
@@ -23,7 +23,7 @@ shell(f"""
 
 if snakemake.params.scratch:
     shell(f"""
-    mv {slurm.scratch}/{sample}_SE.fastq.gz  {snakemake.output}
-    mv {slurm.scratch}/{sample}.htsStats.log  {snakemake.log}
+    mv {slurm.scratch}/{sample}_SE.fastq.gz  {snakemake.output.fastq}
+    mv {slurm.scratch}/{sample}.htsStats.log  {snakemake.output.log}
     """)
     slurm.tearDown()
