@@ -1,4 +1,3 @@
-import os
 import json
 import pandas as pd
 import numpy as np
@@ -67,12 +66,13 @@ class HtsStats():
     def barplot(self, file):
         sns.set()
         sns.set_style("ticks")
-        f, ax = plt.subplots(figsize=(6, 8))
-        df = self.df.loc[["output", "AdapterTrimmer_discarded", 
+        f, ax = plt.subplots(figsize=(10, 6), dpi=200)
+        self.df.loc[["output", "AdapterTrimmer_discarded", 
                           "QWindowTrim_discard", "NTrimmer_discarded"],].T\
             .plot(kind="bar", stacked=True)
-        plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
-        plt.savefig(file)
+        lgd = plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+        plt.savefig(file, dpi=200, bbox_extra_artists=(lgd,), 
+                    bbox_inches='tight')
     
     def to_tsv(self, path):
         self.df.to_csv(path, sep="\t")

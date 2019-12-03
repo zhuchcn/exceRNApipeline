@@ -10,7 +10,7 @@ report: "reports/workflow.rst"
 
 def all_input():
     inputs = [
-        "output/results/endogenous/", 
+        "output/results/endogenous/summary.png", 
         "output/results/qc/preprocess.tsv"
     ]
     inputs.extend(expand(

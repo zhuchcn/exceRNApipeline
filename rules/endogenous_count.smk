@@ -43,11 +43,23 @@ rule organize_endogenous_counts:
         piRNA = "output/04-Genome/ReadsPerGene_piRNA.txt",
         summary = "output/04-Genome/ReadsPerGene_summary.txt"
     output:
-        directory("output/results/endogenous/")
+        gencode = "output/results/endogenous/ReadsPerGene_gencode.txt",
+        tRNA = "output/results/endogenous/ReadsPerGene_tRNA.txt",
+        piRNA = "output/results/endogenous/ReadsPerGene_piRNA.txt",
+        summary = "output/results/endogenous/ReadsPerGene_summary.txt"
     threads: 1
     shell: """
-    cp {input.gencode} {output}
-    cp {input.tRNA} {output}
-    cp {input.piRNA} {output}
-    cp {input.summary} {output}
+    cp {input.gencode} {output.gencode}
+    cp {input.tRNA} {output.tRNA}
+    cp {input.piRNA} {output.piRNA}
+    cp {input.summary} {output.summary}
     """
+
+rule endogenous_count_barplot:
+    input: "output/results/endogenous/ReadsPerGene_summary.txt"
+    output: 
+        report("output/results/endogenous/summary.png",
+               caption="../reports/endogenous_summary.rst",
+               category="Endogenous Genome")
+    threads: 1
+    script: "../src/endogenous_summary_plot.py"

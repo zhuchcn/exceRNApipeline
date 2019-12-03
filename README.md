@@ -1,5 +1,7 @@
 # Human Extracellular small RNA-seq pipeline
 
+[![Snakemake](https://img.shields.io/badge/snakemake-≥5.8.1-brightgreen.svg)](https://snakemake.bitbucket.io)
+
 Data processing pipeline for extracellular small RNA-seq from human specimen. This pipeline is designated for running on HPC with the job management system [SLURM](https://slurm.schedmd.com/sbatch.html). The pipeline has four steps:
 
 1. Preprocess: remove adapters and trimming low quality nucleotides, using [HTStream](https://github.com/ibest/HTStream).
