@@ -14,10 +14,11 @@ def merge_counts(counts, output, attrs, reduce=False):
             if lines[0].startswith('__'):
                 continue
             values = [line.rstrip().split('\t')[-1] for line in lines]
+            gene_annos = '\t'.join(lines[0].rstrip().split('\t')[:-1])
             if reduce:
                 if len([v for v in values if int(v) > 0]) < 1:
                     continue
-            line = lines[0][:-1] + '\t' + '\t'.join(values) + '\n'
+            line = gene_annos + '\t' + '\t'.join(values) + '\n'
             fh.write(line)
     for h in handles.values():
         h.close()

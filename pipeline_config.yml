@@ -11,7 +11,7 @@ samples:
 adapter: "TGGAATTCTCGGGTGCCAAGGAACTC"
 
 # whether map to exogenous database
-exogenous_mapping: true
+exogenous_mapping: false
 
 # Delete this line or set it to null if your HPC does not use scratch
 scratch: "/scratch"
