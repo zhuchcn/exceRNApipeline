@@ -2,13 +2,14 @@ from snakemake.shell import shell
 import os
 
 # Download the tRNA annotation from gencode, and process it.
-cmd = """
+cmd = f"""
 # tRNA gtf from gencode
-wget {snakemake.params.tRNA} -O {snakemake.params.output_dir}/tRNA.gtf.gz
-gunzip -c {snakemake.params.output_dir}/tRNA.gtf.gz \
+wget -q {snakemake.params.tRNA} -O {snakemake.params.output_dir}/tRNA.gtf.gz
+gunzip -c {snakemake.params.output_dir}/tRNA.gtf.gz \\
     > {snakemake.params.output_dir}/tRNA.tmp.gtf
 rm {snakemake.params.output_dir}/tRNA.gtf.gz
 """
+print(cmd, flush=True)
 shell(cmd)
 
 with open(f'{snakemake.params.output_dir}/tRNA.tmp.gtf', 'rt') as ih, \
@@ -33,26 +34,28 @@ with open(f'{snakemake.params.output_dir}/tRNA.tmp.gtf', 'rt') as ih, \
 os.remove(f'{snakemake.params.output_dir}/tRNA.tmp.gtf')
 
 # Download piRNA annotation from piRBase and convert to gtf
-cmd = """
-wget {snakemake.params.piRNA} -O {snakemake.params.output_dir}/piRNAs.bed.gz
+cmd = f"""
+wget -q {snakemake.params.piRNA} -O {snakemake.params.output_dir}/piRNAs.bed.gz
 zcat {snakemake.params.output_dir}/piRNAs.bed.gz |\
     awk -F '\t' '{{
         start = $2 + 1
         stop = $3 + 1
-        print $1"\tpiRbase\texon\t"start"\t"stop"\t"$5"\t"$6"\t.\tgene_id \"piRNA-"$4"\"; transcript_id \"piRNA-"$4"\"; gene_type=\"piRNA\"; gene_name \""$4"\"; transcript_type \""$4"\"; transcript_name \""$4"\";"
+        print $1"\\tpiRbase\\texon\\t"start"\\t"stop"\\t"$5"\\t"$6"\\t.\\tgene_id \\"piRNA-"$4"\\"; transcript_id \\"piRNA-"$4"\\"; gene_type=\\"piRNA\\"; gene_name \\""$4"\\"; transcript_type \\""$4"\\"; transcript_name \\""$4"\\";"
     }}'  \
     > {snakemake.output.piRNA}
 rm {snakemake.params.output_dir}/piRNAs.bed.gz
 """
+print(cmd, flush=True)
 shell(cmd)
 
 # gencode annotation
 # The comprehensive annotation for chromosomes and scaffolds are used.
-cmd = """
-wget {snakemake.params.gencode} -O {snakemake.params.output_dir}/gencode_genome.gtf.gz
+cmd = f"""
+wget -q {snakemake.params.gencode} -O {snakemake.params.output_dir}/gencode_genome.gtf.gz
 zcat {snakemake.params.output_dir}/gencode_genome.gtf.gz |\
     grep -v '^#' \
     >> {snakemake.output.gencode}
 rm {snakemake.params.output_dir}/gencode_genome.gtf.gz
 """
+print(cmd, flush=True)
 shell(cmd)

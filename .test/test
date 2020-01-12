@@ -1,0 +1,7 @@
+#!/bin/bash
+
+./snakemakeslurm run \
+    -j 30 \
+    --use-singularity \
+    --singularity-args "--bind /scratch:/scratch" \
+    --configfile .test/config.yml

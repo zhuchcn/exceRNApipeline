@@ -19,7 +19,7 @@ if extra_args is None:
 
 print(extra_args)
 
-shell(f"""
+cmd = f"""
 STAR \\
     --runMode alignReads \\
     --readFilesIn {snakemake.input.sample} \\
@@ -37,16 +37,22 @@ STAR \\
     --outFilterMultimapNmax  10000 \\
     --alignIntronMax  1 \\
     --alignIntronMin  2  {extra_args}
-""")
+"""
+print(cmd, flush=True)
+shell(cmd)
 
-shell(f"""
+cmd = f"""
 samtools view \\
     {output_prefix}Aligned.out.bam |\\
     awk -F '\\t' '{{{{print($1\"\\t\"$3)}}}}' | uniq | gzip \\
     > {snakemake.output}
-""")
+"""
+print(cmd, flush=True)
+shell(cmd)
 
 if snakemake.params.scratch:
     slurm.tearDown()
 else:
-    shell(f"rm -rf {snakemake.params.prefix}*")
+    cmd = f"rm -rf {snakemake.params.prefix}*"
+    print(cmd)
+    shell(cmd)

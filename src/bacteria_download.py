@@ -15,4 +15,6 @@ getBacteriaGenomes(output_dir, snakemake.params.version,
                    snakemake.threads, verbose=True)
 
 if snakemake.params.scratch:
-    shell(f"mv {output_dir}/* {snakemake.params.output_dir}/")
+    cmd = f"mv {output_dir}/* {snakemake.params.output_dir}/"
+    print(cmd, flush=True)
+    shell(cmd)

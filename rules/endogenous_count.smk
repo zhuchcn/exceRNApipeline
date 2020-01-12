@@ -8,17 +8,23 @@ rule genome_count:
         gencode = temp("output/04-Genome/{sample}/ReadsPerGene_gencode.txt"),
         tRNA = temp("output/04-Genome/{sample}/ReadsPerGene_tRNA.txt"),
         piRNA = temp("output/04-Genome/{sample}/ReadsPerGene_piRNA.txt")
-    threads: 4
+    threads: 24
     shell: """
     htseq-count -f bam -s no -i gene_id \\
         --additional-attr gene_name --additional-attr gene_type \\
-        {input.bam} {input.gencode} > {output.gencode}
+        {input.bam} \\
+        {input.gencode} \\
+        > {output.gencode}
     htseq-count -f bam -s no -i gene_id \\
         --additional-attr gene_name --additional-attr gene_type \\
-        {input.bam} {input.tRNA} > {output.tRNA};
+        {input.bam} \\
+        {input.tRNA} \\
+        > {output.tRNA}
     htseq-count -f bam -s no -i gene_id \\
         --additional-attr gene_name --additional-attr gene_type \\
-        {input.bam} {input.piRNA} > {output.piRNA};
+        {input.bam} \\
+        {input.piRNA} \\
+        > {output.piRNA}
     """
 
 rule summarize_counts:

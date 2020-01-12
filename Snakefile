@@ -5,7 +5,6 @@ singularity: "docker://zhuchcn/exce-rna-pipeline:latest"
 configfile: "default_config.yml"
 configfile: "pipeline_config.yml"
 
-# TODO: figure this out
 report: "reports/workflow.rst"
 
 def all_input():

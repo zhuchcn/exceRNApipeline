@@ -1,0 +1,27 @@
+# path to all samples
+samples:
+    SRR8114380: ".test/data/SRR8114380.sub.fastq.gz"
+    SRR8114381: ".test/data/SRR8114381.sub.fastq.gz"
+    SRR8114382: ".test/data/SRR8114382.sub.fastq.gz"
+    SRR8114383: ".test/data/SRR8114383.sub.fastq.gz"
+    SRR8114384: ".test/data/SRR8114384.sub.fastq.gz"
+    SRR8114385: ".test/data/SRR8114385.sub.fastq.gz"
+
+# the sequencing adapter
+adapter: "TGGAATTCTCGGGTGCCAAGGAACTC"
+
+# whether map to exogenous database
+exogenous_mapping: false
+
+# Delete this line or set it to null if your HPC does not use scratch
+scratch: "/scratch"
+
+# path to the rRNA fasta. Must be downloaded from:
+# "https://ncbi.nlm.nih.gov/nuccore/U13369.1?report=fasta"
+rRNA: "genomes/U13369.1.fasta"
+
+# Parallel processing when map to exogenous database.
+# The databases are large, so using a large parallel number will increase the
+# processing speed but use more storage space.
+silva_align_parallel: 10
+bacteria_align_parallel: 20

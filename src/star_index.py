@@ -29,8 +29,11 @@ cmd = f"""
         --runThreadN {snakemake.threads} \\
         --limitGenomeGenerateRAM {mem}
 """
+print(cmd, flush=True)
 shell(cmd)
 
 if snakemake.params.scratch:
-    shell(f"mv {slurm.scratch}/{genome_dir} {snakemake.output}")
+    cmd = f"mv {slurm.scratch}/{genome_dir} {snakemake.output}"
+    print(cmd, flush=True)
+    shell(cmd)
     slurm.tearDown()

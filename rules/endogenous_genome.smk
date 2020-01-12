@@ -11,7 +11,7 @@ rule genome_index:
     input:
         genome = "genomes/human_genome_primary_assembly.fa"
     output: 
-        temp(directory("genomes/star_index_human_genome"))
+        directory("genomes/star_index_human_genome")
     params:
         extra = "--genomeSAindexNbases 14 --genomeChrBinNbits 18",
         scratch = config.get('scratch'),

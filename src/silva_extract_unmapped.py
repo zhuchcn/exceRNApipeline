@@ -13,7 +13,7 @@ else:
     namelist = snakemake.params.namelist_path
     output = os.path.basenaem(snakemake.output.unmapped)
 
-shell(f"""
+cmd = f"""
     zcat {snakemake.input.aligned} |\\
         cut -f 1 | sort | uniq >> {namelist}
     hts_fastx extract-fastx \\
@@ -21,10 +21,16 @@ shell(f"""
         --output-file {output} \\
         --namelist-file {namelist} \\
         -v -u
-""")
+"""
+print(cmd, flush=True)
+shell(cmd)
 
 if snakemake.params.scratch:
-    shell(f"mv {output} {snakemake.output.unmapped}")
+    cmd = f"mv {output} {snakemake.output.unmapped}"
+    print(cmd, flush=True)
+    shell(cmd)
     slurm.tearDown()
 else:
-    shell(f"rm {namelist}")
+    cmd = f"rm {namelist}"
+    print(cmd, flush=True)
+    shell(cmd)

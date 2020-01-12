@@ -4,6 +4,8 @@ LABEL authors="Chenghao Zhu" \
 
 RUN apt-get update --fix-missing && \
     apt-get clean && \
+    apt-get install unzip && \
+    apt-get install -y gawk && \
     rm -rf /var/lib/apt/lists/*
 
 COPY environment.yml /

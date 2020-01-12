@@ -1,6 +1,8 @@
 # Human Extracellular small RNA-seq pipeline
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥5.8.1-brightgreen.svg)](https://snakemake.bitbucket.io)
+[![Snakemake-Report](https://img.shields.io/badge/snakemake-report-green.svg)](https://cdn.rawgit.com/snakemake-workflows/dna-seq-gatk-variant-calling/master/.test/report.html)
+[![Build Status](https://travis-ci.org/zhuchcn/exceRNApipeline.svg?branch=master)](https://travis-ci.org/zhuchcn/exceRNApipeline)
 
 Data processing pipeline for extracellular small RNA-seq from human specimen. This pipeline is designated for running on HPC with the job management system [SLURM](https://slurm.schedmd.com/sbatch.html). The pipeline has four steps:
 
