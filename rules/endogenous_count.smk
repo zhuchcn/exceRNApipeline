@@ -1,4 +1,4 @@
-rule genome_count:
+rule endogenous_count:
     input:
         gencode = 'genomes/gencode_human_annotation.gtf',
         tRNA = 'genomes/tRNA.gtf',
@@ -8,7 +8,7 @@ rule genome_count:
         gencode = temp("output/04-Genome/{sample}/ReadsPerGene_gencode.txt"),
         tRNA = temp("output/04-Genome/{sample}/ReadsPerGene_tRNA.txt"),
         piRNA = temp("output/04-Genome/{sample}/ReadsPerGene_piRNA.txt")
-    threads: 24
+    threads: config["endogenous_count_cpu"]
     shell: """
     htseq-count -f bam -s no -i gene_id \\
         --additional-attr gene_name --additional-attr gene_type \\
