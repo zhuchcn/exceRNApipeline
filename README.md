@@ -133,8 +133,3 @@ Snakemake supports pipeline report out of box. To generate the report, use the c
 ```bash
 snakemake --report report.html
 ```
-
-## TODO
-
-- [ ] Add workflow report.
-- [ ] Let the pipeline bind the `/scratch` automatically when running with singularity.
