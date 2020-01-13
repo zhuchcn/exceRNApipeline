@@ -47,6 +47,7 @@ rrna_align_cpu: 12
 endogenous_index_ram_gb: 60
 endogenous_index_cpu: 12
 endogenous_align_cpu: 24
+endogenous_count_cpu: 24
 
 mirbase_index_cpu: 12
 mirbase_align_cpu: 16
