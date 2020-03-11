@@ -6,9 +6,10 @@ function help {
     echo "usage: snakemakeslurm [-h] [clean-scratch] [run]"
     echo ""
     echo "optionals:"
-    echo "run                       run pipeline"
-    echo "clean-scratch             clean scratch temporary files in each node and exit"
-    echo "-h, --help                show this help message and exit"
+    echo "    run                       run pipeline"
+    echo "    clean-scratch             clean scratch temporary files in each"
+    echo "                              node and exit"
+    echo "    -h, --help                show this help message and exit"
 }
 
 function clean_scratch {

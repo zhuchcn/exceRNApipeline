@@ -1,0 +1,200 @@
+sampleRead00	Desulfuromonadales
+sampleRead01	Gammaproteobacteria
+sampleRead02	Alphaproteobacteria
+sampleRead03	Cellulomonadaceae
+sampleRead04	Dictyoglomaceae
+sampleRead05	Bacteria
+sampleRead06	Dictyoglomaceae
+sampleRead07	Alphaproteobacteria
+sampleRead08	Actinobacteria
+sampleRead09	Proteobacteria
+sampleRead10	Actinobacteria
+sampleRead11	Shewanella hanedai
+sampleRead12	Cellulomonas
+sampleRead13	Gammaproteobacteria
+sampleRead14	Xanthobacteraceae
+sampleRead15	Phenylobacterium immobile
+sampleRead16	delta/epsilon subdivisions
+sampleRead17	cellular organisms
+sampleRead18	Alteromonadales
+sampleRead19	delta/epsilon subdivisions
+sampleRead20	Dictyoglomia
+sampleRead21	Caulobacterales
+sampleRead22	Micrococcales
+sampleRead23	Phenylobacterium
+sampleRead24	Methylophilus methylotrophus
+sampleRead25	Dictyoglomus
+sampleRead26	Caulobacterales
+sampleRead27	cellular organisms
+sampleRead28	Erwiniaceae
+sampleRead29	Buchnera
+sampleRead30	Proteobacteria
+sampleRead31	Dictyoglomi
+sampleRead32	Cellvibrionales
+sampleRead33	root
+sampleRead34	Cellvibrio
+sampleRead35	Desulfuromonadales
+sampleRead36	Actinobacteria
+sampleRead37	Dictyoglomaceae
+sampleRead38	Nitrosomonadales
+sampleRead39	Terrabacteria group
+sampleRead40	Desulfuromonadales
+sampleRead41	Cellvibrionales
+sampleRead42	Micrococcales
+sampleRead43	Rhizobiales
+sampleRead44	Alphaproteobacteria
+sampleRead45	Desulfuromonadales
+sampleRead46	Erwiniaceae
+sampleRead47	Nitrosomonadales
+sampleRead48	Proteobacteria
+sampleRead49	Shewanella putrefaciens
+sampleRead50	Cellulomonadaceae
+sampleRead51	Shewanella
+sampleRead52	Dictyoglomia
+sampleRead53	Terrabacteria group
+sampleRead54	root
+sampleRead55	Methylophilus methylotrophus
+sampleRead56	Proteobacteria
+sampleRead57	Cellvibrionaceae
+sampleRead58	Gammaproteobacteria
+sampleRead59	Dictyoglomi
+sampleRead60	Alphaproteobacteria
+sampleRead61	Desulfuromonadaceae
+sampleRead62	Cellulomonas
+sampleRead63	Dictyoglomaceae
+sampleRead64	Shewanella colwelliana
+sampleRead65	Terrabacteria group
+sampleRead66	Azorhizobium caulinodans
+sampleRead67	delta/epsilon subdivisions
+sampleRead68	Actinobacteria
+sampleRead69	Bacteria
+sampleRead70	Nitrosomonadales
+sampleRead71	Cellvibrionales
+sampleRead72	Methylophilus methylotrophus
+sampleRead73	Shewanellaceae
+sampleRead74	root
+sampleRead75	Cellulomonas
+sampleRead76	Dictyoglomia
+sampleRead77	Proteobacteria
+sampleRead78	Cellulomonas
+sampleRead79	delta/epsilon subdivisions
+sampleRead80	Nitrosomonadales
+sampleRead81	Methylophilaceae
+sampleRead82	Rhizobiales
+sampleRead83	Gammaproteobacteria
+sampleRead84	Betaproteobacteria
+sampleRead85	Cellulomonas gilvus
+sampleRead86	Azorhizobium
+sampleRead87	Cellvibrio
+sampleRead88	Caulobacterales
+sampleRead89	Betaproteobacteria
+sampleRead90	Phenylobacterium
+sampleRead91	Dictyoglomi
+sampleRead92	Rhizobiales
+sampleRead93	Nitrosomonadales
+sampleRead94	Cellulomonas gilvus
+sampleRead95	Caulobacterales
+sampleRead96	Rhizobiales
+sampleRead97	Bacteria
+sampleRead98	Shewanella putrefaciens
+sampleRead99	Enterobacterales
+sampleRead100	Rhizobiales
+sampleRead101	root
+sampleRead102	Methylophilus methylotrophus
+sampleRead103	Micrococcales
+sampleRead104	Desulfuromonadaceae
+sampleRead105	Caulobacterales
+sampleRead106	Shewanellaceae
+sampleRead107	Actinobacteria
+sampleRead108	Xanthobacteraceae
+sampleRead109	Bacteria
+sampleRead110	Shewanella
+sampleRead111	Dictyoglomaceae
+sampleRead112	Caulobacteraceae
+sampleRead113	Xanthobacteraceae
+sampleRead114	Methylophilus methylotrophus
+sampleRead115	Caulobacteraceae
+sampleRead116	Buchnera aphidicola
+sampleRead117	Shewanella colwelliana
+sampleRead118	Pelobacter
+sampleRead119	Actinobacteria
+sampleRead120	Cellvibrionaceae
+sampleRead121	delta/epsilon subdivisions
+sampleRead122	delta/epsilon subdivisions
+sampleRead123	Dictyoglomi
+sampleRead124	Erwiniaceae
+sampleRead125	Alphaproteobacteria
+sampleRead126	Terrabacteria group
+sampleRead127	Shewanella
+sampleRead128	Deltaproteobacteria
+sampleRead129	Cellulomonas
+sampleRead130	Shewanella hanedai
+sampleRead131	Cellvibrionales
+sampleRead132	Desulfuromonadaceae
+sampleRead133	Xanthobacteraceae
+sampleRead134	Shewanella
+sampleRead135	Cellulomonas gilvus
+sampleRead136	Dictyoglomia
+sampleRead137	Proteobacteria
+sampleRead138	Cellvibrionaceae
+sampleRead139	Actinobacteria
+sampleRead140	Caulobacterales
+sampleRead141	Erwiniaceae
+sampleRead142	Dictyoglomia
+sampleRead143	Cellvibrio
+sampleRead144	Dictyoglomus
+sampleRead145	Methylophilus
+sampleRead146	Bacteria
+sampleRead147	Cellulomonadaceae
+sampleRead148	Phenylobacterium
+sampleRead149	Dictyoglomales
+sampleRead150	Buchnera aphidicola
+sampleRead151	Shewanella
+sampleRead152	Desulfuromonadaceae
+sampleRead153	Shewanella
+sampleRead154	Nitrosomonadales
+sampleRead155	Shewanella colwelliana
+sampleRead156	Methylophilus
+sampleRead157	Enterobacterales
+sampleRead158	Proteobacteria
+sampleRead159	Erwiniaceae
+sampleRead160	Shewanella
+sampleRead161	Gammaproteobacteria
+sampleRead162	Proteobacteria
+sampleRead163	Dictyoglomales
+sampleRead164	Caulobacteraceae
+sampleRead165	Phenylobacterium
+sampleRead166	delta/epsilon subdivisions
+sampleRead167	Methylophilus
+sampleRead168	Shewanellaceae
+sampleRead169	Methylophilus methylotrophus
+sampleRead170	Cellulomonas gilvus
+sampleRead171	Erwiniaceae
+sampleRead172	Xanthobacteraceae
+sampleRead173	Enterobacterales
+sampleRead174	Alphaproteobacteria
+sampleRead175	Actinobacteria
+sampleRead176	Desulfuromonadales
+sampleRead177	Dictyoglomia
+sampleRead178	Desulfuromonadaceae
+sampleRead179	Micrococcales
+sampleRead180	Erwiniaceae
+sampleRead181	delta/epsilon subdivisions
+sampleRead182	Caulobacteraceae
+sampleRead183	Desulfuromonadales
+sampleRead184	Caulobacterales
+sampleRead185	cellular organisms
+sampleRead186	Phenylobacterium
+sampleRead187	Shewanellaceae
+sampleRead188	Gammaproteobacteria
+sampleRead189	Actinobacteria
+sampleRead190	Shewanella colwelliana
+sampleRead191	Betaproteobacteria
+sampleRead192	Erwiniaceae
+sampleRead193	Dictyoglomi
+sampleRead194	Buchnera aphidicola
+sampleRead195	Cellvibrio
+sampleRead196	Erwiniaceae
+sampleRead197	Shewanella colwelliana
+sampleRead198	Cellulomonas gilvus
+sampleRead199	Erwiniaceae

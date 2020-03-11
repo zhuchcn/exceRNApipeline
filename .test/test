@@ -1,7 +1,51 @@
 #!/bin/bash
 
-./snakemakeslurm run \
-    -j 30 \
-    --use-singularity \
-    --singularity-args "--bind /scratch:/scratch" \
-    --configfile .test/config.yml
+function help {
+    echo "test snakemake pipeline"
+    echo ""
+    echo "This script must be called from the pipeline's toplevel directory"
+    echo ""
+    echo "usage: test [-h] [-s|--subset] [-f|--fullset] [-c]"
+    echo ""
+    echo "optionals:"
+    echo "    -h                  show this help message and exit"
+    echo "    -s --subset         run test with a small subset data"
+    echo "    -f --fullset        run test with the complete dataset"
+    echo "    -c --clean          clean up slurmout, scratch files, and unlock"
+    echo "                        snakemake"
+}
+
+function test_subset {
+    ./snakemakeslurm run \
+        -j 30 \
+        --use-singularity \
+        --singularity-args "--bind /scratch:/scratch" \
+        --configfile .test/config.yml
+}
+
+function test_fullset {
+    ./snakemakeslurm run \
+        -j 30 \
+        --use-singularity \
+        --singularity-args "--bind /scratch:/scratch"
+}
+
+function clean {
+    # unlock snakemake
+    snakemake --unlock
+    # remove slurmout
+    rm -rf slurmout/*
+    # clean srcatch usage
+    ./snakemakeslurm clean-scratch
+}
+
+if [ $# -eq 0 ]; then help; exit 1
+else
+    key="$1"
+    case $key in
+        -h|--help) help; exit ;;
+        -s|--subset) test_subset; exit ;;
+        -f|--fullset)  test_fullset; exit ;;
+        -c|--clean) clean; exit ;;
+    esac
+fi

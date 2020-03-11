@@ -12,7 +12,8 @@ urls:
     # tRNA annotation from gencode, generated from GtRNAdb
     tRNA: "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_32/gencode.v32.tRNAs.gtf.gz"
     # piRNA annotation
-    piRNA: "http://www.regulatoryrna.org/database/piRNA/download/archive/v2.0/bed/hsa.bed.gz"
+    # piRNA: "http://www.regulatoryrna.org/database/piRNA/download/archive/v2.0/bed/hsa.bed.gz"
+    piRNA: "https://www.pirnadb.org/download/downloadarchive/gff_gtf/pirnadb.v1_7_6.hg38.gtf.gz"
     # gencode human genome annotation
     gencode: "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_32/gencode.v32.primary_assembly.annotation.gtf.gz"
     # RepeatMasker

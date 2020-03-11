@@ -1,0 +1,73 @@
+#!/usr/bin/env python
+
+import subprocess as sp
+import argparse
+import sys
+import os
+
+
+def unlock(args):
+    # sp.run("snakemake --unlock".split())
+    print("unlock pipeline")
+
+def clean_scratch(args):
+    if not os.path.exists(args.slurm_status) or \
+        len(os.listdir(args.slurm_status)) == 0:
+        print("no record found for scratch usage.")
+        sys.exit(0)
+    print("cleaning scratches..")
+    for job in os.listdir(args.slurm_status):
+        job_file = os.path.join(args.slurm_status, job)
+        with open(job_file, "rt") as fh:
+            hostname = fh.readlines()[0].rstrip()
+        print(hostname + " " + job)
+        sp.run(f"ssh {hostname} rm -rf {args.scratch_dir}/{job}".split())
+        os.remove(job_file)
+    return
+
+def run(args):
+    cmd = "snakemake"
+    
+
+def main():
+    parser = argparse.ArgumentParser()
+    subparsers = parser.add_subparsers(title="commands", dest="command")
+    
+    # clean scratch
+    parser_clean_scratch = subparsers.add_parser(
+        name="clean-scratch",
+        description="clean scratch temporary files in each node",
+        help="clean scratch temporary files in each node"
+    )
+    parser_clean_scratch.set_defaults(func=clean_scratch)
+    parser_clean_scratch.add_argument(
+        "--slurm-status", type=str, default="slurm_job_status",
+        help="the directory which stores the slurm scratch usage records" +\
+             " (default: slurm_job_status)"
+    )
+    parser_clean_scratch.add_argument(
+        "--scratch-dir", type=str, default="/scratch",
+        help="the scratch path (default: /scratch)"
+    )
+
+    # run
+    parser_run = subparsers.add_parser(
+        name="run",
+        description="run pipeline",
+        help="run pipeline"
+    )
+    parser_run.set_defaults(func=run)
+    
+    parser_unlock = subparsers.add_parser("unlock")
+    parser_unlock.set_defaults(func=unlock)
+
+    if len(sys.argv)==1:
+        parser.print_help(sys.stderr)
+        sys.exit(1)
+
+    args = parser.parse_args()
+    args.func(args)
+
+
+if __name__ == "__main__":
+    main()

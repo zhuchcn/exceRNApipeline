@@ -1,0 +1,3 @@
+MER5B_DNA/hAT-Charlie_chr1_11678_11780
+(TGCTCC)n_Simple_repeat_chr1_15798_15849
+L2a_LINE/L2_chr1_18907_19048

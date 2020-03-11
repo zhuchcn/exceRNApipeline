@@ -39,5 +39,5 @@ bacteria_index:
 bacteria_mapping:
     mem: 60G
 
-genome_count:
+endogenous_count:
     mem: 60G

@@ -10,3 +10,6 @@ output*
 genomes
 __pycache__
 *.sif
+.java
+.cph*
+.config
