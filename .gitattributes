@@ -2,5 +2,5 @@
 Snakefile linguist-language=Python
 .test/* linguist-vendored=false
 .test/report.html linguist-generated=true
-src/include/gzstream/* linguist-vendored
-src/include/catch/* linguist-vendored
+src/includes/gzstream/* linguist-vendored
+src/includes/catch/* linguist-vendored
