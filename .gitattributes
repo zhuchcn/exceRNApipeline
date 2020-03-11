@@ -1,6 +1,6 @@
 *.smk linguist-language=Python
 Snakefile linguist-language=Python
 .test/* linguist-vendored=false
-.test/report.html linguist-generated=true
-src/includes/gzstream/* linguist-generated=true
-src/includes/catch/* linguist-generated=true
+.test/report.html linguist-generated
+src/includes/gzstream/* linguist-vendored
+src/includes/catch/* linguist-vendored
