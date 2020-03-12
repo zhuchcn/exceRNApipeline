@@ -205,7 +205,6 @@ dependencies:
   - zlib=1.2.11
   - zstd=1.4.4
   - pip:
-    - "git+https://github.com/zhuchcn/hts-toolkit"
     - pyqt5-sip==4.19.18
     - pyqtwebengine==5.12.1
 

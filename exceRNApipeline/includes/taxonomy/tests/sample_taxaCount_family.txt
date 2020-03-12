@@ -1,0 +1,9 @@
+cellvibrionaceae	7
+methylophilaceae	10
+caulobacteraceae	10
+dictyoglomaceae	7
+erwiniaceae	14
+shewanellaceae	20
+desulfuromonadaceae	6
+cellulomonadaceae	13
+xanthobacteraceae	7

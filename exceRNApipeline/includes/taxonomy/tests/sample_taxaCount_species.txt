@@ -1,0 +1,8 @@
+azorhizobium caulinodans	1
+shewanella putrefaciens	2
+phenylobacterium immobile	1
+buchnera aphidicola	3
+cellulomonas gilvus	5
+shewanella colwelliana	5
+shewanella hanedai	2
+methylophilus methylotrophus	6

@@ -1,0 +1,9 @@
+dictyoglomus	2
+pelobacter	1
+cellvibrio	4
+buchnera	4
+shewanella	16
+azorhizobium	2
+methylophilus	9
+phenylobacterium	6
+cellulomonas	10

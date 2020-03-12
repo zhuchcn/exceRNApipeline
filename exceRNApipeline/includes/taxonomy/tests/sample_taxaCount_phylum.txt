@@ -1,0 +1,3 @@
+dictyoglomi	20
+proteobacteria	130
+actinobacteria	26

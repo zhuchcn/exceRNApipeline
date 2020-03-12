@@ -1,0 +1,9 @@
+cellvibrionales	11
+caulobacterales	17
+alteromonadales	21
+dictyoglomales	9
+enterobacterales	17
+rhizobiales	12
+micrococcales	17
+nitrosomonadales	16
+desulfuromonadales	12

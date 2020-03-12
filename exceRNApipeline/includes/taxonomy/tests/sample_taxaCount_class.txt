@@ -1,0 +1,6 @@
+dictyoglomia	15
+alphaproteobacteria	35
+actinobacteria	26
+deltaproteobacteria	13
+gammaproteobacteria	55
+betaproteobacteria	19
