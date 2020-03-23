@@ -26,7 +26,7 @@ def parse_args():
     # parser.add_argument('-w', '--working-dir', type=str)
     parser.add_argument('-o', '--output-dir', type=str)
     parser.add_argument('-t', '--nthreads', type=int)
-    parser.add_argument('-m', '--mem-gb', type=int)
+    parser.add_argument('-m', '--mem-gb', type=str)
     parser.add_argument('-a', '--extra-args', type=str)
     parser.add_argument("-s", "--scratch-dir", type=str,
                         help="Path to the scratch diractory.")
@@ -43,7 +43,10 @@ def main():
     input_fastas = args.input_fastas if args.input_fastas.startswith("/") \
                 else os.path.join(os.getcwd(), args.input_fastas)
     
-    mem = args.mem_gb or nthreads * 2
+    try:
+        mem = int(args.mem_gb)
+    except ValueError:
+        mem = nthreads * 2
     mem *= 1024 ** 3
 
     extra_args = args.extra_args 

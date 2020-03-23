@@ -76,11 +76,11 @@ class TestCasePipelineRun(TestCase):
             "", "run",
             "--configfile", "pipeline_config.yml",
             "--slurm-config", "slurm_config.yml",
-            "--use-singularity"
+            "--use-singularity",
+            "--singularity-args", "--bind /scratch:/scratch"
         ]
         out = self.run_pipeline()
-        print(out)
-        self.assertTrue(out, "srun.+snakemake --snakefile.+ "+\
-            "--use-singularity" +\
-            " --cluster-config slurm_config.yml --cluster \"sbatch.+\"")
+        self.assertRegex(out, "srun.+snakemake --snakefile.+ "+\
+            "--use-singularity --singularity-args \"--bind /scratch:/scratch\"" +\
+            " +--cluster-config slurm_config.yml --cluster \"sbatch.+\"")
     

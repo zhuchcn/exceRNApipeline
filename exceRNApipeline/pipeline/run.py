@@ -15,10 +15,12 @@ def run(args):
         cmd += f" -d {args.directory}"
     if args.report:
         cmd += " --report"
+    cmd += f" -j {args.jobs}"
+    cmd += f" --latency-wait {60 if args.slurm_config else 5}"
     if args.use_singularity:
         cmd += " --use-singularity"
     if args.singularity_args:
-        cmd += f" --singularity-args {args.singularity_args}"
+        cmd += f" --singularity-args \"{args.singularity_args}\""
     if args.printshellcmds:
         cmd += " -p"
     if args.dry_run:
@@ -41,10 +43,10 @@ def run(args):
         if args.slurm_args:
             slurm_cmd += args.slurm_args
         cmd = slurm_cmd + " " + cmd + f" --cluster-config {args.slurm_config}"+\
-            f" --cluster \"sbatch {sm_args}\""
+            f" --cluster \"sbatch {sm_args}\" &"
     
     print(cmd)
-    sp.run(cmd.split())
+    sp.call(cmd, shell=True)
 
 def parse_args(subparsers):
     parser = subparsers.add_parser(
@@ -83,14 +85,15 @@ def parse_args(subparsers):
         default."""
     )
     parser.add_argument(
-        '-j', '--jobs', type=int, help="""Use at most N cores in parallel. If
-        N is omitted or ‘all’, the limit is set to the number of available
-        cores."""
+        '-j', '--jobs', type=int, default = 999, help="""Use at most N cores 
+        in parallel. If N is omitted or ‘all’, the limit is set to the number
+        of available cores. Default: 999"""
     )
     parser.add_argument(
-        '-w', '--latency-wait', type=int, help="""Wait given seconds if an
-        output file of a job is not present after the job finished. This helps
-        if your filesystem suffers from latency (default 5). Default: 5"""
+        '-w', '--latency-wait', type=int, help="""Wait given
+        seconds if an output file of a job is not present after the job
+        finished. This helps if your filesystem suffers from latency. 
+        Default: 5 for local run, and 60 on slurm"""
     )
     parser.add_argument(
         '--use-singularity', action="store_true", help="""Run pipeline within

@@ -31,8 +31,13 @@ def star_align(input_fq, genome_index, output_prefix, output_txt, nthreads, extr
     cmd = f"""
     samtools view \\
         {output_prefix}Aligned.out.bam |\\
-        awk -F '\\t' '{{{{print($1\"\\t\"$3)}}}}' | uniq | gzip \\
-        > {output_txt}
+    awk -F '\\t' '{{{{
+        split($3, taxa, ":")
+        gsub(/_/, " ", taxa[1])
+        print($1\"\\t\"taxa[1])
+    }}}}' | \\
+    uniq | gzip \\
+    > {output_txt}
     """
     logger(cmd)
     shell(cmd)
@@ -43,8 +48,7 @@ def parse_args():
     parser.add_argument('-n', '--sample-name', type=str)
     parser.add_argument('-c', '--collection-index', type=str)
     parser.add_argument('-g', '--genome-index', type=str)
-    parser.add_argument('-b', '--output-bam', type=str)
-    parser.add_argument('-u', '--output-unmapped', type=str)
+    parser.add_argument('-o', '--output-txt', type=str)
     parser.add_argument('-p', '--output-prefix', type=str)
     parser.add_argument('-t', '--nthreads', type=int)
     parser.add_argument('-s', '--scratch-dir', type=str)
@@ -66,7 +70,7 @@ def main():
         index = args.collection_index
         with SlurmJob(args.scratch_dir) as slurm:
             output_prefix = f'{slurm.scratch}/{name}/bacteria_{index}_'
-            cmd = f"mkdir {output_prefix}"
+            cmd = f"mkdir {slurm.scratch}/{name}"
             logger(cmd)
             shell(cmd)
 

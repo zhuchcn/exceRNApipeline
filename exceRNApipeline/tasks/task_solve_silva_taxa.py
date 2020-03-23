@@ -19,10 +19,12 @@ def solve_taxa(inpath, outpath, su, taxmap):
     with gzip.open(inpath, 'rt') as ih, gzip.open(outpath, 'wt') as oh:
         for record in SeqIO.parse(ih, 'fasta'):
             silva_id = record.id.split('.')[0]
+            silva_id_long = record.id.split(' ')[0]
             ncbi_tax = taxmap[silva_id] + ':' + su.upper()
-            record.id = ncbi_tax
-            record.name = ncbi_tax
-            record.description = ncbi_tax
+            record_id = silva_id_long + ":" + ncbi_tax
+            record.id = record_id
+            record.name = record_id
+            record.description = record_id
             SeqIO.write(record, oh, 'fasta')
 
 def parse_args():

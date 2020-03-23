@@ -5,7 +5,16 @@ import argparse
 from snakemake.shell import shell
 
 
+def mkdir(path):
+    if os.path.isdir(path):
+        return
+    parent = os.path.dirname(path)
+    if parent != "":
+        mkdir(parent)
+    os.mkdir(path)
+
 def star_align(input_fq, genome_index, output_prefix, output_txt, nthreads, extra_args):
+    mkdir(os.path.dirname(output_prefix))
     cmd = f"""
     STAR \\
         --runMode alignReads \\
@@ -31,8 +40,8 @@ def star_align(input_fq, genome_index, output_prefix, output_txt, nthreads, extr
     cmd = f"""
     samtools view \\
         {output_prefix}Aligned.out.bam |\\
-        awk -F '\\t' '{{{{print($1\"\\t\"$3)}}}}' | uniq | gzip \\
-        > {output_txt}
+    awk -F '\\t' '{{{{split($3, tax, ":"); print $1\"\\t\"tax[2]}}}}' | uniq | gzip \\
+    > {output_txt}
     """
     logger(cmd)
     shell(cmd)
@@ -66,7 +75,7 @@ def main():
         with SlurmJob(args.scratch_dir) as slurm:
             output_prefix = f'{slurm.scratch}/{name}/silva_{index}_'
             # create a temp dir in scratch
-            cmd = f"mkdir {output_prefix}"
+            cmd = f"mkdir {slurm.scratch}/{name}"
             logger(cmd)
             shell(cmd)
 

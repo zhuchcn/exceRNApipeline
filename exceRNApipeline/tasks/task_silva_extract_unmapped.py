@@ -20,7 +20,8 @@ def extract_silva_unmapped(aligned_txt, unmapped_fq, output_fq, namelist, verbos
         "",
         "-i", unmapped_fq,
         "-o", output_fq,
-        "-l", namelist
+        "-l", namelist,
+        "-f", 'fastq'
     ]
     if verbose:
         sys.argv.append("-v")
@@ -47,7 +48,6 @@ def main():
     output = args.output_fq
 
     if args.scratch_dir:
-        name = args.sample_name
         with SlurmJob(args.scratch_dir) as slurm:
             namelist = os.path.basename(namelist)
             namelist = slurm.scratch + '/' + namelist

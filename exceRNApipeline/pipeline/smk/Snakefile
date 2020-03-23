@@ -51,8 +51,9 @@ rule preprocess:
             --input-fq {input.sample} \\
             --output-fq {output.fastq} \\
             --sample-name {wildcards.sample} \\
+            --prefix {params.prefix} \\
             --adapter {params.adapter} \\
-            --log-file {params.log} \\
+            --log-file {output.log} \\
             --scratch-dir {params.scratch}
     """
 
@@ -70,7 +71,7 @@ rule preprocess_stats:
     threads: 1
     shell: """
     task_preprocess_stats.py \\
-        --log-file {intput.logs} \\
+        --log-file {input.logs} \\
         --sample-names {params.samples} \\
         --output-tsv {output.tsv} \\
         --output-plot {output.plot}
@@ -118,7 +119,7 @@ rule univec_index:
         -o {output} \\
         -t {threads} \\
         -m {params.mem} \\
-        -a {params.extra} \\
+        -a "{params.extra}" \\
         -s {params.scratch}
     """
 
@@ -177,7 +178,7 @@ rule rrna_index:
         -o {output} \\
         -t {threads} \\
         -m {params.mem} \\
-        -a {params.extra} \\
+        -a "{params.extra}" \\
         -s {params.scratch}
     """ 
 
@@ -230,7 +231,7 @@ rule genome_index:
         -o {output} \\
         -t {threads} \\
         -m {params.mem} \\
-        -a {params.extra} \\
+        -a "{params.extra}" \\
         -s {params.scratch}
     """ 
 
@@ -403,7 +404,7 @@ rule re_index:
         -o {output} \\
         -t {threads} \\
         -m {params.mem} \\
-        -a {params.extra} \\
+        -a "{params.extra}" \\
         -s {params.scratch}
     """ 
 
@@ -470,17 +471,17 @@ rule filter_silva:
         grep -e ' Bacteria;' -e ' Archaea;' \\
              -e ' Eukaryota;Opisthokonta;Nucletmycea;Fungi;' |\\
         sed 's/^>//g' > {output.silva_ssu_namelist}
-    task_extract_fasta.py \\
+    task_extract_fastx.py \\
         --input-file {input.silva_lsu} \\
         --output-file {output.silva_lsu} \\
         --namelist-file {output.silva_lsu_namelist} \\
-        --seq-format fastq \\
+        --seq-format fasta \\
         --verbose
-    task_extract_fasta.py \\
+    task_extract_fastx.py \\
         --input-file {input.silva_ssu} \\
         --output-file {output.silva_ssu} \\
         --namelist-file {output.silva_ssu_namelist} \\
-        --seq-format fastq \\
+        --seq-format fasta \\
         --verbose
     """
 
@@ -537,7 +538,7 @@ rule silva_index:
         -o {output} \\
         -t {threads} \\
         -m {params.mem} \\
-        -a {params.extra} \\
+        -a "{params.extra}" \\
         -s {params.scratch}
     """ 
 
@@ -549,14 +550,14 @@ rule silva_mapping:
     wildcard_constraints:
         silva_ind="[0-9]+"
     params:
-        prefix="06-SILVA/{sample}/Aligned_{silva_ind}/",
+        prefix="output/06-SILVA/{sample}/Aligned_{silva_ind}/",
         scratch = config.get('scratch')
     threads: config["silva_align_cpu"]
     shell: '''
     task_star_align_silva.py \\
         -i {input.sample} \\
         -n {wildcards.sample} \\
-        -c {wildcards.bacteria_ind} \\
+        -c {wildcards.silva_ind} \\
         -g {input.genome} \\
         -o {output} \\
         -p {params.prefix} \\
@@ -564,17 +565,17 @@ rule silva_mapping:
         -s {params.scratch}
     '''
 
+# TODO: mark output as temp later on
 rule silva_combine:
     input: 
         expand(
             "output/06-SILVA/{{sample}}/Aligned_{silva_ind}.txt.gz",
             silva_ind=range(1, config["silva_align_parallel"] + 1)
         )
-    output: temp("output/06-SILVA/{sample}/Aligned_combine.txt.gz")
+    output: "output/06-SILVA/{sample}/Aligned_combine.txt.gz"
     threads: 3,
     shell: """
-    zcat {input} | \\
-    sed -E 's/:[LS]SU$//g' | \\
+    zcat {input} | 
     gzip -c > {output}
     """
 
@@ -601,11 +602,11 @@ rule silva_count_taxa:
         prefix = "output/06-SILVA/{sample}/exogenousAligned_SILVA_"
     threads: 4
     shell: """
-    hts_taxonomy count-taxa \\
+    task_count_exogenous_taxa.py \\
         --input-file {input.sample} \\
         --output-prefix {params.prefix} \\
-        --nodes-dump  {input.taxdump}/nodes.dmp \\
-        --names-dump {input.taxdump}/names.dmp
+        --nodes-dmp  {input.taxdump}/nodes.dmp \\
+        --names-dmp {input.taxdump}/names.dmp
     """
 
 rule silva_count_combine:
@@ -696,7 +697,13 @@ rule bacteria_combine_genome:
     output:
         temp("genomes/bacteria/fasta/bacteria_{bacteria_ind}_collection.fasta")
     threads: 2
-    shell: "zcat {input.genome_collection}/*.fa.gz > {output}"
+    shell: """
+    for fa in $(find "{input.genome_collection}" -name "*.dna.toplevel.fa.gz")
+    do
+        taxa=$(basename -- $fa |cut -d '.' -f1)
+        zcat $fa | sed "s/^>/>$taxa:/g" >> {output}
+    done
+    """
 
 rule bacteria_index:
     input:
@@ -714,7 +721,7 @@ rule bacteria_index:
         -o {output} \\
         -t {threads} \\
         -m {params.mem} \\
-        -a {params.extra} \\
+        -a "{params.extra}" \\
         -s {params.scratch}
     """ 
 
@@ -725,7 +732,7 @@ rule bacteria_mapping:
     output: 
         temp("output/07-Bacteria/{sample}/Aligned_{bacteria_ind}.txt.gz")
     params:
-        prefix = lambda wildcards: f"06-SILVA/{wildcards.sample}/Aligned_{wildcards.bacteria_ind}/",
+        prefix = lambda wildcards: f"output/06-SILVA/{wildcards.sample}/Aligned_{wildcards.bacteria_ind}/",
         scratch = config.get('scratch')
     threads: config["bacteria_align_cpu"]
     shell: '''
@@ -768,11 +775,11 @@ rule bacteria_count_taxa:
         prefix = "output/07-Bacteria/{sample}/exogenousAligned_bacteria_"
     threads: 4
     shell: """
-    hts_taxonomy count-taxa \\
+    task_count_exogenous_taxa.py \\
         --input-file {input.sample} \\
         --output-prefix {params.prefix} \\
-        --nodes-dump  {input.taxdump}/nodes.dmp \\
-        --names-dump {input.taxdump}/names.dmp
+        --nodes-dmp  {input.taxdump}/nodes.dmp \\
+        --names-dmp {input.taxdump}/names.dmp
     """
 
 rule bacteria_count_combine:

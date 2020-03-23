@@ -1,3 +1,5 @@
 **
 !/Dockerfile
 !/environment.yml
+!/exceRNApipeline
+!/setup.py

@@ -60,7 +60,7 @@ def parse_args():
     parser.add_argument('--output-tRNA', type=str)
     parser.add_argument('--output-piRNA', type=str)
     parser.add_argument('--output-summary', type=str)
-    parser.add_argument('--sample-names', type=str)
+    parser.add_argument('--sample-names', type=str, nargs="+")
     parser.add_argument('--output-attrs', type=str, nargs='*')
     parser.add_argument('--key', type=str)
     return parser.parse_args()

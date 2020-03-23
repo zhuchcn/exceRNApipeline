@@ -22,7 +22,10 @@ def extract_fastx(input_path, output_path, seq_format, verbose, namelist_file):
     oh = gzip.open(output_path, 'wt')
 
     for record in SeqIO.parse(ih, seq_format):
-        record_name = record.description
+        if seq_format == "fasta":
+            record_name = record.description
+        else:
+            record_name = record.name
         save = record_name in names
         if save:
             if verbose:
@@ -39,7 +42,7 @@ def parse_args():
     parser.add_argument('-o', '--output-file', type=str)
     parser.add_argument('-l', '--namelist-file', type=str)
     parser.add_argument('-f', '--seq-format', type=str)
-    parser.add_argument('-v', '--verbose', type=str)
+    parser.add_argument('-v', '--verbose', action="store_true")
     return parser.parse_args()
 
 def main():
