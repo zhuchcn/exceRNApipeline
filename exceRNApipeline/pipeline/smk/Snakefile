@@ -64,7 +64,7 @@ rule preprocess_stats:
     output: 
         tsv = "output/results/qc/preprocess.tsv",
         plot = report("output/results/qc/preprocess_barplot.png", 
-                      caption="../reports/preprocess_barplot.rst",
+                      caption="reports/preprocess_barplot.rst",
                       category="Preprocess")
     params:
         samples = list(config["samples"].keys())
@@ -82,7 +82,7 @@ rule fastqc:
         fastq = "output/01-Preprocess/{sample}/{sample}_SE.fastq.gz"
     output:
         report("output/results/qc/{sample}_SE_fastqc/Images/per_base_quality.png",
-               caption="../reports/qc_per_base_quality.rst",
+               caption="reports/qc_per_base_quality.rst",
                category="QC")
     params:
         outdir = "output/results/qc"
@@ -358,7 +358,7 @@ rule endogenous_count_barplot:
     input: "output/results/endogenous/ReadsPerGene_summary.txt"
     output: 
         report("output/results/endogenous/summary.png",
-               caption="../reports/endogenous_summary.rst",
+               caption="reports/endogenous_summary.rst",
                category="Endogenous Genome")
     threads: 1
     shell: '''
@@ -565,7 +565,6 @@ rule silva_mapping:
         -s {params.scratch}
     '''
 
-# TODO: mark output as temp later on
 rule silva_combine:
     input: 
         expand(
@@ -753,7 +752,7 @@ rule bacteria_combine_result:
             "output/07-Bacteria/{{sample}}/Aligned_{bacteria_ind}.txt.gz",
             bacteria_ind = _BACTERIA_COLLECTION_INDICES
         )
-    output: temp("output/07-Bacteria/{sample}/Aligned.txt.gz")
+    output: "output/07-Bacteria/{sample}/Aligned.txt.gz"
     threads: 2
     shell: """
     zcat {input} | \\

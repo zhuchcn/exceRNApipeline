@@ -17,7 +17,9 @@ class SetupOptions():
             "exceRNApipeline.includes*",
             "exceRNApipeline.tests*"
         ]),
-        "package_data": {"exceRNApipeline.pipeline": ["smk/*"]},
+        "package_data": {
+            "exceRNApipeline.pipeline": ["smk/*", "smk/reports/*"]
+        },
         "entry_points": {
             'console_scripts': [
                 'pipeline=exceRNApipeline.pipeline.__main__:main',

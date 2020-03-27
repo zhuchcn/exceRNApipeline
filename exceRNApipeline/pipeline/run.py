@@ -14,7 +14,7 @@ def run(args):
     if args.directory:
         cmd += f" -d {args.directory}"
     if args.report:
-        cmd += " --report"
+        cmd += f" --report {args.report}"
     cmd += f" -j {args.jobs}"
     cmd += f" --latency-wait {60 if args.slurm_config else 5}"
     if args.use_singularity:
@@ -80,9 +80,9 @@ def parse_args(subparsers):
         origin)."""
     )
     parser.add_argument(
-        '--report', action="store_true", help="""Create an HTML report with
-        results and statistics. If no filename is given, report.html is the
-        default."""
+        '--report', nargs="?", const="report.html", help="""Create an HTML
+        report with results and statistics. If no filename is given,
+        report.html is the default."""
     )
     parser.add_argument(
         '-j', '--jobs', type=int, default = 999, help="""Use at most N cores 
